@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAPS — Serra da Ibiapaba</title>
+<link rel="icon" href="assistente.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{
+  --g:#0f3624;--g2:#1a5c3a;--g3:#2d8a5a;--a:#4ecb8d;--a2:#a8e8c8;
+  --ink:#0a1f12;--paper:#f7f4ef;--cream:#ede9e0;--warm:#e8e2d5;
+  --r:#c0392b;--y:#d4a017;--muted:#6b7f74;
+  --bg:var(--paper);--surface:#fff;--text:var(--ink);--sub:var(--muted);
+  --border:#d4cfc4;--card-bg:#fff;--nav-bg:var(--g);
+  --tag-bg:#eef5f1;--tag-color:#1a5c3a;
+  --acesso-bg:#f0faf5;--obs-bg:#fffaeb;
+  --modal-bg:#fff;--info-item:#f7faf8;
+  --bar-track:#e8f0ec;
+  --shadow:0 1px 3px rgba(10,31,18,.06),0 4px 16px rgba(10,31,18,.08);
+  --shadow-lg:0 8px 32px rgba(10,31,18,.12),0 2px 8px rgba(10,31,18,.08);
+}
+[data-theme="dark"]{
+  --bg:#080f0b;--surface:#0d1a11;--text:#deeae3;--sub:#4a6a56;
+  --border:#1a2e21;--card-bg:#0d1a11;--nav-bg:#040a06;
+  --tag-bg:#0f2a1a;--tag-color:#4ecb8d;
+  --acesso-bg:#0a1f14;--obs-bg:#140f00;
+  --modal-bg:#0d1a11;--info-item:#0a1f14;
+  --bar-track:#0f2a1a;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.4);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.5);
+  --paper:#080f0b;--ink:#deeae3;--cream:#0d1a11;--warm:#0f1f14;
+  --a:#4ecb8d;--g2:#2d8a5a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+*{transition:background-color .25s,color .2s,border-color .2s}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;font-size:15px;line-height:1.65;font-weight:600}
+body.welcome-lock{overflow:hidden}
+
+/* GRAIN TEXTURE */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.4;mix-blend-mode:multiply;
+}
+[data-theme="dark"] body::before{mix-blend-mode:screen;opacity:.15}
+
+/* THEME TOGGLE */
+.theme-bar{position:fixed;top:14px;right:16px;z-index:200}
+.theme-toggle{background:rgba(255,255,255,.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px 6px 10px;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Sora',sans-serif;font-size:.75rem;color:#fff;letter-spacing:.02em;transition:all .2s}
+[data-theme="dark"] .theme-toggle{background:rgba(78,203,141,.1);border-color:rgba(78,203,141,.25);color:var(--a)}
+.theme-toggle:hover{transform:scale(1.04);background:rgba(255,255,255,.2)}
+.toggle-track{width:30px;height:16px;border-radius:8px;background:rgba(255,255,255,.2);position:relative}
+[data-theme="dark"] .toggle-track{background:var(--a)}
+.toggle-thumb{width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:.25s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"] .toggle-thumb{left:16px;background:#080f0b}
+
+/* HEADER */
+header{
+  background:var(--g);color:#fff;
+  padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;
+}
+header::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 30% -10%,rgba(78,203,141,.18) 0%,transparent 60%),
+              radial-gradient(ellipse 50% 80% at 80% 110%,rgba(45,138,90,.25) 0%,transparent 60%);
+  pointer-events:none;
+}
+.header-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--a);font-weight:600;margin-bottom:1.2rem;
+  background:rgba(78,203,141,.1);border:1px solid rgba(78,203,141,.25);
+  border-radius:100px;padding:5px 14px;
+}
+.logo{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,6vw,3.6rem);
+  line-height:1.1;position:relative;z-index:1;
+  font-weight:700;letter-spacing:-.02em;
+}
+.logo em{font-style:italic;color:var(--a)}
+header .sub{margin-top:.6rem;font-size:.84rem;opacity:.82;font-weight:600;letter-spacing:.01em;position:relative;z-index:1}
+.stats-row{
+  display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+  margin-top:3rem;position:relative;z-index:1;
+  border:1px solid rgba(255,255,255,.1);border-radius:16px;
+  overflow:hidden;max-width:600px;margin-left:auto;margin-right:auto;
+  backdrop-filter:blur(8px);background:rgba(255,255,255,.04);
+}
+.stat{
+  flex:1;min-width:90px;text-align:center;
+  padding:1.4rem 1rem;
+  border-right:1px solid rgba(255,255,255,.08);
+}
+.stat:last-child{border-right:none}
+.stat b{display:block;font-family:'Playfair Display',serif;font-size:2rem;color:var(--a);line-height:1;font-weight:700}
+.stat span{font-size:.68rem;opacity:.55;text-transform:uppercase;letter-spacing:.08em;margin-top:3px;display:block}
+
+/* AI ASSISTANT HERO */
+.ai-hero{
+  background:linear-gradient(135deg,var(--g2) 0%,var(--g) 100%);
+  border-radius:20px;padding:1.6rem;margin-bottom:1.5rem;
+  position:relative;overflow:hidden;
+}
+.ai-hero::before{
+  content:'';position:absolute;right:-30px;top:-30px;
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(78,203,141,.2),transparent 70%);
+}
+.ai-hero-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--a);font-weight:600;margin-bottom:.5rem}
+.ai-hero h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.5rem;line-height:1.3}
+.ai-hero p{font-size:.84rem;color:rgba(255,255,255,.82);line-height:1.65;margin-bottom:1rem;font-weight:600}
+.ai-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.8rem}
+.ai-chip{
+  background:rgba(78,203,141,.12);border:1px solid rgba(78,203,141,.25);
+  color:var(--a);border-radius:100px;padding:5px 12px;
+  font-size:.74rem;cursor:pointer;font-family:'Sora',sans-serif;font-weight:700;
+  transition:.15s;white-space:nowrap;
+}
+.ai-chip:hover{background:rgba(78,203,141,.25);border-color:var(--a)}
+.ai-input-row{display:flex;gap:8px}
+.ai-input{
+  flex:1;padding:.7rem 1rem;border-radius:10px;
+  border:1px solid rgba(78,203,141,.3);
+  background:rgba(255,255,255,.08);color:#fff;
+  font-family:'Sora',sans-serif;font-size:.85rem;outline:none;
+  transition:.2s;
+}
+.ai-input::placeholder{color:rgba(255,255,255,.58)}
+.ai-input:focus{border-color:var(--a);background:rgba(255,255,255,.12)}
+.ai-send{
+  background:var(--a);border:none;border-radius:10px;
+  width:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.15s;flex-shrink:0;
+}
+.ai-send:hover{background:#3ab87d;transform:scale(1.05)}
+.ai-send svg{color:#fff}
+
+/* RESPOSTA AI */
+.ai-response{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:1.2rem;margin-top:1rem;
+  display:none;animation:fadeSlide .4s ease;
+  box-shadow:var(--shadow);
+}
+.ai-response.visible{display:block}
+.ai-response-header{display:flex;align-items:center;gap:8px;margin-bottom:.8rem}
+.ai-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--a);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.ai-response-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);font-weight:600}
+.ai-response-text{font-size:.88rem;color:var(--text);line-height:1.75;font-weight:600}
+.ai-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:.8rem}
+.ai-result-card{
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;
+  padding:.8rem;cursor:pointer;transition:.15s;
+}
+.ai-result-card:hover{border-color:var(--g3);box-shadow:var(--shadow)}
+.ai-result-card .arc-badge{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:6px;margin-bottom:.4rem;display:inline-block}
+.ai-result-card .arc-name{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.2rem;line-height:1.3}
+.ai-result-card .arc-city{font-size:.74rem;color:var(--sub);font-weight:600}
+.ai-thinking{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--sub)}
+.ai-thinking span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--a);animation:bounce 1.2s infinite}
+.ai-thinking span:nth-child(2){animation-delay:.2s}
+.ai-thinking span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+/* SEARCH */
+.search-wrap{position:relative}
+.search-input{
+  width:100%;padding:.9rem 1rem .9rem 3rem;
+  border-radius:12px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);
+  font-family:'Sora',sans-serif;font-size:.9rem;outline:none;
+  transition:.2s;box-shadow:var(--shadow);
+}
+.search-input:focus{border-color:var(--g3);box-shadow:var(--shadow),0 0 0 3px rgba(45,138,90,.1)}
+.search-icon-el{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--sub);pointer-events:none}
+.search-clear{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--sub);font-size:.9rem;display:none;padding:4px 6px;border-radius:6px;transition:.15s}
+.search-clear.vis{display:block}
+.search-clear:hover{color:var(--r);background:var(--obs-bg)}
+
+/* CHIPS */
+.chips-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:.7rem}
+.chip{
+  background:var(--tag-bg);color:var(--tag-color);
+  border-radius:100px;padding:5px 13px;font-size:.75rem;
+  cursor:pointer;border:1px solid var(--border);
+  transition:.15s;font-family:'Sora',sans-serif;user-select:none;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.chip:hover,.chip.on{background:var(--g2);color:#fff;border-color:var(--g2)}
+
+/* RESULTS BAR */
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-top:.7rem;font-size:.75rem;color:var(--sub);min-height:1.2rem}
+.results-bar b{color:var(--g3)}
+[data-theme="dark"] .results-bar b{color:var(--a)}
+
+/* FILTERS */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem}
+.fb{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:100px;padding:5px 16px;font-size:.78rem;
+  cursor:pointer;color:var(--sub);font-family:'Sora',sans-serif;
+  transition:.15s;user-select:none;font-weight:700;
+}
+.fb.on,.fb:hover{background:var(--g2);color:#fff;border-color:var(--g2)}
+
+/* SORT */
+.sort-row{display:flex;align-items:center;gap:8px;margin-bottom:1.2rem}
+.sort-label{font-size:.75rem;color:var(--sub)}
+.sort-btn{
+  background:none;border:1px solid var(--border);border-radius:8px;
+  padding:4px 10px;font-size:.74rem;cursor:pointer;color:var(--sub);
+  font-family:'Sora',sans-serif;transition:.15s;
+}
+.sort-btn.on,.sort-btn:hover{background:var(--tag-bg);color:var(--g2);border-color:var(--g2)}
+
+/* NAV */
+nav{
+  background:var(--nav-bg);
+  display:flex;overflow-x:auto;position:sticky;top:0;z-index:99;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+nav button{
+  background:none;border:none;color:rgba(255,255,255,.5);
+  padding:.9rem 1.3rem;font-family:'Sora',sans-serif;font-size:.82rem;
+  cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:.2s;letter-spacing:.01em;
+}
+nav button.on{color:var(--a);border-color:var(--a)}
+nav button:hover{color:#fff}
+
+main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-index:1}
+.sec{display:none;animation:fadeUp .35s ease}
+.sec.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
+
+/* CARD */
+.card{
+  background:var(--card-bg);border-radius:16px;
+  border:1px solid var(--border);padding:1.4rem 1.3rem 1.2rem;
+  opacity:0;transform:translateY(16px);
+  transition:box-shadow .25s,border-color .2s,opacity .4s,transform .4s;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+  cursor:pointer;
+}
+.card.vis{opacity:1;transform:translateY(0)}
+.card.hidden-card{display:none}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--g3),var(--a));
+  transform:scaleX(0);transform-origin:left;transition:.3s;
+}
+.card:hover::before{transform:scaleX(1)}
+.card:hover{box-shadow:var(--shadow-lg);border-color:var(--border)}
+.card-hint{
+  position:absolute;bottom:0;right:0;
+  background:var(--g2);color:#fff;font-size:.68rem;font-weight:600;
+  padding:5px 13px;border-radius:12px 0 14px 0;
+  opacity:0;transition:.2s;
+}
+.card:hover .card-hint{opacity:1}
+
+/* HIGHLIGHTS */
+.highlight{background:rgba(78,203,141,.3);border-radius:3px;padding:0 2px}
+
+/* BADGES */
+.badge{
+  display:inline-block;font-size:.65rem;font-weight:600;
+  border-radius:8px;padding:3px 10px;text-transform:uppercase;
+  letter-spacing:.07em;margin-bottom:.65rem;align-self:flex-start;
+}
+.bubs{background:#dbeafe;color:#1e3a8a}
+.baps{background:#dcfce7;color:#14532d}
+.bhos{background:#fef9c3;color:#713f12}
+.bupa{background:#fee2e2;color:#7f1d1d}
+.bcra{background:#f3e8ff;color:#4a1d96}
+.bcen{background:#e0f2fe;color:#0c4a6e}
+.baas{background:#fce7f3;color:#831843}
+[data-theme="dark"] .bubs{background:#1e2a4a;color:#93c5fd}
+[data-theme="dark"] .baps{background:#1a3a26;color:#86efac}
+[data-theme="dark"] .bhos{background:#2a2000;color:#fcd34d}
+[data-theme="dark"] .bupa{background:#2a1010;color:#fca5a5}
+[data-theme="dark"] .bcra{background:#2a1a4a;color:#c4b5fd}
+[data-theme="dark"] .bcen{background:#0a2030;color:#7dd3fc}
+[data-theme="dark"] .baas{background:#2a0a1a;color:#f9a8d4}
+
+.card h3{
+  font-family:'Playfair Display',serif;font-size:1rem;
+  color:var(--g2);margin-bottom:.2rem;line-height:1.3;font-weight:700;
+}
+[data-theme="dark"] .card h3{color:var(--a)}
+.card .cid{font-size:.73rem;color:var(--sub);margin-bottom:.8rem;display:flex;align-items:center;gap:4px}
+
+.card-rows{display:flex;flex-direction:column;gap:4px;margin-bottom:.65rem}
+.row{display:flex;gap:7px;align-items:flex-start;font-size:.8rem;color:var(--sub);font-weight:600}
+
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:.65rem}
+.tag{background:var(--tag-bg);color:var(--tag-color);border-radius:8px;padding:3px 9px;font-size:.7rem;font-weight:700}
+
+.acesso{
+  border-left:2px solid var(--a);padding:6px 10px;font-size:.75rem;
+  color:var(--g2);margin-top:.65rem;background:var(--acesso-bg);border-radius:0 8px 8px 0;
+}
+[data-theme="dark"] .acesso{color:var(--a)}
+.obs{
+  border-left:2px solid var(--y);padding:6px 10px;font-size:.75rem;
+  color:#5a4200;margin-top:.5rem;background:var(--obs-bg);border-radius:0 8px 8px 0;
+}
+[data-theme="dark"] .obs{color:#e8c060}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:3rem 1rem;color:var(--sub)}
+.no-results .icon{font-size:2.5rem;margin-bottom:.6rem;display:block;filter:grayscale(1);opacity:.4}
+.no-results h4{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:.3rem;font-weight:500}
+.no-results p{font-size:.82rem}
+
+/* SECTION TITLES */
+.stit{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--text);margin-bottom:.3rem;font-weight:700;letter-spacing:-.01em}
+.ssub{font-size:.85rem;color:var(--sub);margin-bottom:1.5rem;line-height:1.65;font-weight:600}
+.fonte{font-size:.72rem;color:var(--sub);margin-top:1.5rem;padding-top:.75rem;border-top:1px solid var(--border);opacity:.7}
+
+/* MODAL */
+#planet-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .4s}
+#planet-overlay.open{opacity:1;pointer-events:all}
+#planet-bg{position:absolute;inset:0;background:rgba(4,12,7,.9);backdrop-filter:blur(8px);opacity:0;transition:opacity .4s}
+#planet-overlay.open #planet-bg{opacity:1}
+#planet-modal{
+  position:relative;z-index:2;background:var(--modal-bg);border-radius:22px;
+  max-width:580px;width:92%;max-height:92vh;overflow-y:auto;
+  transform:scale(.9) translateY(24px);opacity:0;
+  transition:transform .45s cubic-bezier(.16,1,.3,1) .05s,opacity .35s ease;
+  box-shadow:0 50px 120px rgba(0,0,0,.6);
+}
+#planet-overlay.open #planet-modal{transform:scale(1) translateY(0);opacity:1}
+.modal-hero{background:var(--g);padding:2rem 1.8rem 1.6rem;border-radius:22px 22px 0 0;position:relative;overflow:hidden}
+.modal-hero::before{content:'';position:absolute;right:-50px;top:-50px;width:240px;height:240px;background:radial-gradient(circle,rgba(78,203,141,.15),transparent 70%);pointer-events:none}
+.modal-badge{display:inline-block;font-size:.68rem;font-weight:600;border-radius:8px;padding:4px 12px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.9rem;position:relative;z-index:1}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;line-height:1.2;margin-bottom:.4rem;position:relative;z-index:1;font-weight:700}
+.modal-city{font-size:.82rem;color:var(--a);position:relative;z-index:1;display:flex;align-items:center;gap:6px;opacity:.85}
+.modal-close{position:absolute;top:1.1rem;right:1.1rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);width:36px;height:36px;border-radius:50%;cursor:pointer;color:#fff;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:3}
+.modal-close:hover{background:rgba(255,255,255,.25)}
+#modal-map{height:220px;z-index:1;background:var(--bar-track)}
+#modal-map .map-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--sub);font-size:.82rem;gap:8px}
+.modal-body{padding:1.5rem 1.8rem 2rem;background:var(--modal-bg)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.2rem}
+.info-item{background:var(--info-item);border-radius:10px;padding:.8rem 1rem}
+.info-item .ilabel{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--sub);margin-bottom:.3rem}
+.info-item .ival{font-size:.84rem;color:var(--text);font-weight:700}
+.info-item .ival a{color:var(--g2);text-decoration:none}
+[data-theme="dark"] .info-item .ival a{color:var(--a)}
+.modal-section{margin-bottom:1.1rem}
+.modal-section h4{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--sub);margin-bottom:.65rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.spec-list{list-style:none}
+.spec-list li{display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:var(--text);padding:6px 0;border-bottom:1px dashed var(--border)}
+.spec-list li:last-child{border:none}
+.spec-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--a);flex-shrink:0;margin-top:5px}
+.modal-alert{border-left:2px solid var(--y);padding:9px 12px;font-size:.8rem;color:#5a4200;background:var(--obs-bg);border-radius:0 8px 8px 0;margin-bottom:1rem}
+[data-theme="dark"] .modal-alert{color:#e8c060}
+.modal-access{border-left:2px solid var(--a);padding:9px 12px;font-size:.8rem;color:var(--g2);background:var(--acesso-bg);border-radius:0 8px 8px 0;margin-bottom:1rem}
+[data-theme="dark"] .modal-access{color:var(--a)}
+
+/* AI SUGGEST no modal */
+.modal-ai-section{
+  background:linear-gradient(135deg,var(--g) 0%,var(--g2) 100%);
+  border-radius:12px;padding:1rem 1.2rem;margin-top:1rem;
+}
+.modal-ai-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--a);margin-bottom:.4rem;font-weight:600}
+.modal-ai-text{font-size:.84rem;color:rgba(255,255,255,.9);line-height:1.7;margin-bottom:.7rem;font-weight:600}
+.modal-ai-ask{
+  background:rgba(78,203,141,.15);border:1px solid rgba(78,203,141,.3);
+  color:var(--a);border-radius:8px;padding:6px 12px;
+  font-size:.76rem;cursor:pointer;font-family:'Sora',sans-serif;
+  transition:.15s;display:inline-flex;align-items:center;gap:5px;font-weight:600;
+}
+.modal-ai-ask:hover{background:rgba(78,203,141,.25)}
+.modal-ai-ask:disabled{opacity:.65;cursor:wait}
+
+/* POR CIDADE */
+.mapa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.mc{
+  background:var(--card-bg);border-radius:14px;border:1px solid var(--border);
+  padding:1rem 1.1rem;transform:scale(.95);opacity:0;
+  transition:opacity .4s,transform .4s,box-shadow .2s;
+}
+.mc.vis{opacity:1;transform:scale(1)}
+.mc:hover{box-shadow:var(--shadow-lg)}
+.mc h4{
+  font-family:'Playfair Display',serif;font-size:1rem;color:var(--g2);
+  margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);
+  font-weight:700;
+}
+[data-theme="dark"] .mc h4{color:var(--a)}
+.mc li{font-size:.77rem;color:var(--sub);list-style:none;padding:4px 0;border-bottom:1px dashed var(--border)}
+.mc li:last-child{border:none}
+
+/* PSICO */
+.psec h3{font-family:'Playfair Display',serif;font-size:1.15rem;margin:1.8rem 0 .7rem;color:var(--text);font-weight:700}
+.pcard{background:var(--card-bg);border-radius:12px;border:1px solid var(--border);padding:1.1rem 1.2rem;margin-bottom:.8rem}
+.pcard h4{font-size:.92rem;font-weight:600;color:var(--g2);margin-bottom:.4rem}
+[data-theme="dark"] .pcard h4{color:var(--a)}
+.pcard p,.pcard li{font-size:.84rem;color:var(--sub);line-height:1.75;font-weight:600}
+.fluxo{counter-reset:f;padding:0}
+.fluxo li{
+  counter-increment:f;list-style:none;
+  padding:.5rem .5rem .5rem 2.4rem;position:relative;
+  font-size:.82rem;color:var(--sub);border-bottom:1px dashed var(--border);line-height:1.5;
+}
+.fluxo li:last-child{border:none}
+.fluxo li::before{
+  content:counter(f);position:absolute;left:.3rem;top:.4rem;
+  width:1.4rem;height:1.4rem;background:var(--g2);color:#fff;
+  border-radius:50%;font-size:.68rem;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* DADOS */
+.kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
+.kbox{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:12px;padding:1.1rem;text-align:center;
+  transition:box-shadow .2s;
+}
+.kbox:hover{box-shadow:var(--shadow)}
+.kbox b{display:block;font-family:'Playfair Display',serif;font-size:2rem;color:var(--g2);font-weight:700}
+[data-theme="dark"] .kbox b{color:var(--a)}
+.kbox span{font-size:.72rem;color:var(--sub);margin-top:2px;display:block}
+.chart-wrap{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:1.3rem;margin-bottom:1.1rem;box-shadow:var(--shadow)}
+.chart-wrap h4{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:1.2rem;display:flex;align-items:center;gap:6px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bl{width:130px;font-size:.76rem;color:var(--sub);text-align:right;flex-shrink:0}
+.bo{flex:1;background:var(--bar-track);border-radius:6px;height:24px;overflow:hidden}
+.bi{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--g2),var(--g3));display:flex;align-items:center;padding-left:9px;width:0;transition:width 1.1s cubic-bezier(.4,0,.2,1)}
+.bi span{font-size:.71rem;color:#fff;font-weight:600;white-space:nowrap}
+.donut-wrap{display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.donut-legend{flex:1;min-width:140px}
+.legend-item{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:.77rem;color:var(--sub)}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.radial-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px;margin-bottom:1rem}
+.radial-item{text-align:center}
+.radial-item svg{display:block;margin:0 auto}
+.radial-label{font-size:.71rem;color:var(--sub);margin-top:.35rem}
+.radial-val{font-family:'Playfair Display',serif;font-size:1rem;color:var(--g2);margin-top:.1rem;font-weight:700}
+[data-theme="dark"] .radial-val{color:var(--a)}
+
+/* INSIGHT CARDS */
+.insights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:1.2rem}
+.insight-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:12px;padding:1rem;position:relative;overflow:hidden;
+}
+.insight-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+}
+.insight-card.good::after{background:linear-gradient(90deg,var(--g3),var(--a))}
+.insight-card.warn::after{background:linear-gradient(90deg,var(--y),#f0c040)}
+.insight-card.info::after{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.insight-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--sub);margin-bottom:.3rem;font-weight:600}
+.insight-val{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--text);font-weight:700;line-height:1}
+.insight-sub{font-size:.73rem;color:var(--sub);margin-top:.3rem;line-height:1.5}
+
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:#fff;padding:.65rem 1.4rem;
+  border-radius:100px;font-size:.8rem;opacity:0;pointer-events:none;
+  z-index:700;transition:all .3s;box-shadow:var(--shadow-lg);white-space:nowrap;
+  font-weight:700;letter-spacing:.01em;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* WELCOME */
+#welcome-overlay{
+  position:fixed;inset:0;z-index:2000;
+  display:flex;align-items:center;justify-content:center;
+  padding:1.2rem;background:rgba(4,12,7,.55);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  opacity:1;pointer-events:all;transition:opacity .35s ease,backdrop-filter .35s ease,background-color .35s ease;
+}
+#welcome-overlay.closed{opacity:0;pointer-events:none}
+#welcome-overlay.leaving{
+  pointer-events:none;animation:welcomeOverlayOut .75s cubic-bezier(.16,1,.3,1) forwards;
+}
+.welcome-card{
+  width:min(520px,94vw);background:var(--modal-bg);
+  border:1px solid var(--border);border-radius:18px;
+  padding:5.7rem 1.5rem 1.6rem;box-shadow:var(--shadow-lg);
+  transform:translateY(0) scale(1);transition:transform .35s ease,opacity .25s ease,filter .35s ease;
+  position:relative;z-index:2;
+}
+#welcome-overlay.closed .welcome-card{transform:translateY(12px) scale(.98)}
+#welcome-overlay.leaving .welcome-card{animation:welcomeCardOut .58s cubic-bezier(.16,1,.3,1) forwards}
+.welcome-assistant{
+  position:absolute;z-index:3;left:50%;top:8px;
+  width:132px;height:132px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;border:none;
+  filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));
+  transform:translateX(-50%);
+  pointer-events:none;overflow:hidden;
+}
+#welcome-overlay.leaving .welcome-assistant{animation:assistantExit .72s cubic-bezier(.16,1,.3,1) forwards}
+.welcome-assistant::before{
+  content:'';position:absolute;inset:12px;border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--g2),var(--g));
+  color:var(--a);font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:800;
+  box-shadow:0 18px 48px rgba(0,0,0,.34);
+}
+.welcome-assistant.fallback::before{content:'PH';display:flex}
+.welcome-assistant img{
+  position:relative;z-index:1;width:100%;height:100%;object-fit:contain;
+}
+@keyframes floatAssistant{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(-12px)}
+}
+.welcome-kicker{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--g2);background:var(--tag-bg);
+  border:1px solid var(--border);border-radius:100px;
+  padding:5px 12px;font-size:.72rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:.9rem;
+}
+[data-theme="dark"] .welcome-kicker{color:var(--a)}
+.welcome-title{
+  font-family:'Playfair Display',serif;font-size:1.55rem;
+  line-height:1.18;color:var(--text);font-weight:800;margin-bottom:.7rem;
+}
+.welcome-text{font-size:.9rem;color:var(--sub);line-height:1.75;font-weight:600;margin-bottom:1rem}
+.welcome-list{display:grid;gap:.55rem;margin-bottom:1.1rem}
+.welcome-list span{
+  display:flex;gap:8px;align-items:flex-start;
+  font-size:.82rem;color:var(--text);font-weight:600;
+  background:var(--info-item);border-radius:10px;padding:.7rem .8rem;
+}
+.welcome-btn{
+  width:100%;border:none;border-radius:12px;background:var(--g2);
+  color:#fff;font-family:'Sora',sans-serif;font-size:.9rem;
+  font-weight:800;padding:.85rem 1rem;cursor:pointer;transition:.2s;
+}
+.welcome-btn:hover{background:var(--g);transform:translateY(-1px)}
+.welcome-btn:disabled{cursor:wait;opacity:.8}
+@keyframes welcomeOverlayOut{
+  0%{opacity:1;background:rgba(4,12,7,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  55%{opacity:1;background:rgba(4,12,7,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  100%{opacity:0;background:rgba(4,12,7,0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}
+}
+@keyframes welcomeCardOut{
+  0%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+  45%{opacity:1;transform:translateY(-8px) scale(1.015);filter:blur(0)}
+  100%{opacity:0;transform:translateY(28px) scale(.96);filter:blur(3px)}
+}
+@keyframes assistantExit{
+  0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(0)}
+  35%{opacity:1;transform:translateX(-50%) translateY(-18px) scale(1.12) rotate(-4deg)}
+  100%{opacity:0;transform:translateX(-50%) translateY(-72px) scale(.72) rotate(8deg)}
+}
+
+/* LOADING */
+.skeleton{background:linear-gradient(90deg,var(--bar-track) 25%,var(--border) 37%,var(--bar-track) 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:6px;height:14px;margin-bottom:8px}
+@keyframes shimmer{0%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* DIVIDER */
+.card-divider{height:1px;background:var(--border);margin:.7rem 0}
+
+/* AI status */
+.ai-status{
+  display:flex;align-items:center;gap:6px;
+  font-size:.72rem;color:var(--a);margin-bottom:.5rem;
+  opacity:.95;font-weight:600;
+}
+.ai-status-dot{width:6px;height:6px;border-radius:50%;background:var(--a);animation:pulse 2s infinite}
+
+@media(max-width:520px){
+  #welcome-overlay{align-items:center;padding:4.2rem 1rem 1rem}
+  .welcome-card{padding-top:5.1rem}
+  .welcome-assistant{top:8px;width:108px;height:108px}
+  .bl{width:75px;font-size:.71rem}
+  .info-grid{grid-template-columns:1fr}
+  #planet-modal{width:96%;max-height:94vh}
+  .modal-body{padding:1rem 1.2rem 1.5rem}
+  .grid{grid-template-columns:1fr}
+  header{padding:3.5rem 1.2rem 3rem}
+}
+</style>
+</head>
+<body class="welcome-lock">
+<div class="toast" id="toast"></div>
+
+<!-- WELCOME -->
+<div id="welcome-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+  <div class="welcome-assistant" aria-hidden="true">
+    <img src="assistente.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('fallback')">
+  </div>
+  <div class="welcome-card">
+    <div class="welcome-kicker">RAPS Ibiapaba</div>
+    <h2 class="welcome-title" id="welcome-title">Bem-vindo ao mapeamento da Rede de Atenção Psicossocial</h2>
+    <p class="welcome-text">Este site reúne serviços de saúde, assistência social e apoio psicossocial da Serra da Ibiapaba para facilitar a consulta por cidade, tipo de equipamento e necessidade de cuidado.</p>
+    <div class="welcome-list">
+      <span>Consulte UBS, CAPS, hospitais, UPA, CRAS, CREAS e outros equipamentos mapeados.</span>
+      <span>Use filtros, busca por palavras-chave e cards detalhados com horário, acesso e serviços.</span>
+      <span>O Philipe, Assistente virtual, ajuda o usuário a encontrar opções mais adequadas a partir do que ele descreve.</span>
+    </div>
+    <button class="welcome-btn" onclick="enterSite()">Prosseguir</button>
+  </div>
+</div>
+
+<!-- THEME -->
+<div class="theme-bar">
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">
+    <span id="theme-icon"></span>
+    <div class="toggle-track"><div class="toggle-thumb"></div></div>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
+
+<!-- MODAL -->
+<div id="planet-overlay" role="dialog" aria-modal="true">
+  <div id="planet-bg" onclick="closePlanet()"></div>
+  <div id="planet-modal">
+    <div class="modal-hero">
+      <button class="modal-close" onclick="closePlanet()" aria-label="Fechar">X</button>
+      <div id="m-badge" class="modal-badge"></div>
+      <h2 id="m-title" class="modal-title"></h2>
+      <div class="modal-city">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="m-city-text"></span>
+      </div>
+    </div>
+    <div id="modal-map"></div>
+    <div class="modal-body">
+      <div class="info-grid" id="m-grid"></div>
+      <div id="m-access" class="modal-access" style="display:none"></div>
+      <div id="m-obs" class="modal-alert" style="display:none"></div>
+      <div class="modal-section" id="m-services-wrap" style="display:none">
+        <h4>Serviços oferecidos</h4>
+        <ul class="spec-list" id="m-services"></ul>
+      </div>
+      <div class="modal-section" id="m-specs-wrap" style="display:none">
+        <h4>Informações adicionais</h4>
+        <ul class="spec-list" id="m-specs"></ul>
+      </div>
+      <div class="modal-ai-section" id="m-ai-section">
+        <div class="modal-ai-label">Assistente virtual</div>
+        <div class="modal-ai-text" id="m-ai-text">Preparando análise contextual...</div>
+        <button class="modal-ai-ask" onclick="askMoreAboutCurrent()">Perguntar mais sobre este serviço ↗</button>
+      </div>
+      <p class="fonte" id="m-fonte" style="margin-top:1rem"></p>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-eyebrow">Projeto de Extensão · FACIBI 2026</div>
+  <div class="logo">Rede de Atenção<br><em>Psicossocial</em> — Serra da Ibiapaba</div>
+  <p class="sub">Mapeamento realizado por alunos do 7º semestre de Psicologia · 110 respostas coletadas</p>
+  <div class="stats-row">
+    <div class="stat"><b data-target="5">0</b><span>Cidades</span></div>
+    <div class="stat"><b data-target="110">0</b><span>Respostas</span></div>
+    <div class="stat"><b data-target="4">0</b><span>CAPS</span></div>
+    <div class="stat"><b data-target="1">0</b><span>UPA 24h</span></div>
+    <div class="stat"><b data-target="3">0</b><span>Hospitais</span></div>
+  </div>
+</header>
+
+<nav id="nav">
+  <button class="on" onclick="tab('servicos',this)">Serviços</button>
+  <button onclick="tab('mapa',this)">Por Cidade</button>
+  <button onclick="tab('psico',this)">Rede de atenção Psicossocial</button>
+  <button onclick="tab('dados',this)">Dados</button>
+</nav>
+
+<main>
+
+<!-- SERVIÇOS -->
+<div class="sec on" id="servicos">
+  <div class="stit">Serviços por Cidade</div>
+  <div class="ssub">Mapeamento da RAPS Ibiapaba · Use o assistente virtual ou a busca para encontrar o serviço certo</div>
+
+  <!-- AI ASSISTANT -->
+  <div class="ai-hero">
+    <div class="ai-status"><span class="ai-status-dot"></span> Assistente ativo</div>
+    <div class="ai-hero-label">Assistente virtual local</div>
+    <h3>Encontre o serviço de saúde ideal</h3>
+    <p>Descreva o que você precisa e o assistente identificará os equipamentos mais adequados com base no mapeamento da RAPS.</p>
+    <div class="ai-chips">
+      <span class="ai-chip" onclick="quickAsk(this)">Preciso de atendimento psiquiátrico de urgência</span>
+      <span class="ai-chip" onclick="quickAsk(this)">Tratamento para dependência de álcool</span>
+      <span class="ai-chip" onclick="quickAsk(this)">Apoio para mulher em situação de violência</span>
+      <span class="ai-chip" onclick="quickAsk(this)">Atendimento para criança ou adolescente</span>
+      <span class="ai-chip" onclick="quickAsk(this)">Programas sociais e cadastro único</span>
+    </div>
+    <div class="ai-input-row">
+      <input type="text" class="ai-input" id="ai-query" placeholder="Ex: Moro em Ubajara e preciso de apoio psicológico…" onkeydown="if(event.key==='Enter')sendAI()">
+      <button class="ai-send" onclick="sendAI()" aria-label="Enviar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="ai-response" id="ai-response">
+      <div class="ai-response-header">
+        <div class="ai-dot"></div>
+        <div class="ai-response-label">Análise do assistente</div>
+      </div>
+      <div class="ai-response-text" id="ai-response-text"></div>
+      <div class="ai-cards-grid" id="ai-result-cards"></div>
+    </div>
+  </div>
+
+  <!-- BUSCA MANUAL -->
+  <div style="margin-bottom:1.2rem">
+    <div class="search-wrap">
+      <svg class="search-icon-el" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="search-input" id="search-input" placeholder="Buscar por cidade, tipo de serviço, especialidade…" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
+      <button class="search-clear" id="search-clear-btn" onclick="clearSearch()">X</button>
+    </div>
+    <div class="chips-row">
+      <span class="chip" data-q="urgência" onclick="chipSearch(this)">Urgência</span>
+      <span class="chip" data-q="psiquiátric" onclick="chipSearch(this)">Psiquiatria</span>
+      <span class="chip" data-q="álcool" onclick="chipSearch(this)">Álcool/Drogas</span>
+      <span class="chip" data-q="mulher" onclick="chipSearch(this)">Mulher</span>
+      <span class="chip" data-q="criança" onclick="chipSearch(this)">Criança/Adolesc.</span>
+      <span class="chip" data-q="24 horas" onclick="chipSearch(this)">24h</span>
+      <span class="chip" data-q="tianguá" onclick="chipSearch(this)">Tianguá</span>
+      <span class="chip" data-q="ubajara" onclick="chipSearch(this)">Ubajara</span>
+      <span class="chip" data-q="ibiapina" onclick="chipSearch(this)">Ibiapina</span>
+    </div>
+    <div class="results-bar">
+      <span id="search-count"></span>
+      <span id="search-hint" style="font-size:.74rem;color:var(--sub)">Clique em um card para ver detalhes completos</span>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="fb on" onclick="fil('',this)">Todos</button>
+    <button class="fb" onclick="fil('ubs',this)">UBS / PSF</button>
+    <button class="fb" onclick="fil('caps',this)">CAPS</button>
+    <button class="fb" onclick="fil('hospital',this)">Hospital</button>
+    <button class="fb" onclick="fil('upa',this)">UPA 24h</button>
+    <button class="fb" onclick="fil('cras',this)">CRAS / CREAS</button>
+    <button class="fb" onclick="fil('cen',this)">Centro Conv.</button>
+  </div>
+
+  <div id="no-results" style="display:none">
+    <div class="no-results">
+      <span class="icon"></span>
+      <h4>Nenhum resultado</h4>
+      <p>Tente buscar por cidade, tipo de serviço ou especialidade. Ou use o assistente acima.</p>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+
+  <p class="fonte">Fonte: Mapeamento da RAPS — Projeto de Extensão FACIBI, Alunos de Psicologia 7º semestre. 2026</p>
+</div>
+
+<!-- POR CIDADE -->
+<div class="sec" id="mapa">
+  <div class="stit">Rede por Município</div>
+  <div class="ssub">Visão consolidada — 5 municípios mapeados pelo Projeto de Extensão</div>
+  <div class="mapa-grid" id="mgrid">
+    <div class="mc"><h4>Tianguá</h4><ul><li>UPA 24h</li><li>CAPS II</li><li>CAPS AD</li><li>Hospital Madalena Nunes</li><li>20+ UBS</li><li>SAMU (base)</li></ul></div>
+    <div class="mc"><h4>Viçosa do Ceará</h4><ul><li>Hospital Municipal</li><li>CAPS</li><li>CRAS Sede + CRAS Juá dos Vieiras</li><li>3 UBS mapeadas</li></ul></div>
+    <div class="mc"><h4>São Benedito</h4><ul><li>17+ UBS</li><li>CRAS Antônio Furtado + Damião Jorge</li><li>CREAS</li><li>Centro de Convivência Luís Francisco</li><li>Acolhimento São Francisco</li></ul></div>
+    <div class="mc"><h4>Ibiapina</h4><ul><li>CAPS</li><li>Hospital M. Wanderlene</li><li>CRAS Pedrinhas + Alto Lindo + Estádio</li><li>12 UBS mapeadas</li><li>CAMI (Atendimento à Mulher)</li><li>AA — Grupo Central</li></ul></div>
+    <div class="mc"><h4>Ubajara</h4><ul><li>Hospital Francisca Belarmino</li><li>18 UBS / PSFs</li><li>CRAS Crisântema + CRAS III + CRAS Maria Moreira</li><li>CREAS</li></ul></div>
+  </div>
+  <p style="margin-top:1.2rem;font-size:.78rem;color:var(--sub)">UPA &nbsp;·&nbsp; CAPS &nbsp;·&nbsp; Hospital &nbsp;·&nbsp; UBS &nbsp;·&nbsp; CRAS/CREAS &nbsp;·&nbsp; Outros</p>
+  <p class="fonte">Fonte: Mapeamento RAPS — Projeto de Extensão FACIBI 2026</p>
+</div>
+
+<!-- PSICOSSOCIAL -->
+<div class="sec" id="psico">
+  <div class="stit">Atenção Psicossocial</div>
+  <div class="ssub">Serviços de saúde mental e apoio psicossocial da região da Serra da Ibiapaba</div>
+  <div class="psec">
+    <h3>CAPS ativos</h3>
+    <div class="pcard"><h4>CAPS II — Tianguá</h4><p>Referência regional. Atende adultos com transtornos mentais graves. Psicoterapia individual e em grupo, psiquiatria, oficinas terapêuticas, PTS, visita domiciliar. Contato via Instagram @capsadtiangua.</p></div>
+    <div class="pcard"><h4>CAPS AD — Tianguá</h4><p>Especializado em álcool e outras drogas. Acolhimento, redução de danos, grupos de apoio, atendimento familiar, enfermagem, educação física. Tel.: (88) 99311-1511 / 99311-2902.</p></div>
+    <div class="pcard"><h4>CAPS — Viçosa do Ceará</h4><p>Rua Fontenele Sobrinho, 1524, Centro. Tel.: (88) 3632-1278. Atende adultos com sofrimento psíquico grave.</p></div>
+    <div class="pcard"><h4>CAPS — Ibiapina</h4><p>Rua Luis B. de Lima, 300. Acolhimento, atendimento individual multiprofissional, grupos terapêuticos, oficinas e visita domiciliar.</p></div>
+  </div>
+  <div class="psec">
+    <h3>Outros equipamentos psicossociais</h3>
+    <div class="pcard"><h4>CRAS / CREAS — todos os municípios</h4><p>Todos os municípios mapeados possuem ao menos um CRAS. CRAS = Proteção Social Básica (PAIF, SCFV, CadÚnico). CREAS = Proteção Especial (PAEFI, situações de risco e violência).</p></div>
+    <div class="pcard"><h4>CAMI — Casa de Atendimento à Mulher (Ibiapina)</h4><p>Psicologia, assistência social, advocacia, nutrição, cursos de autonomia econômica, grupo reflexivo para homens agressores. Denúncias: Disque 100.</p></div>
+    <div class="pcard"><h4>Centro de Convivência Luís Francisco de Paiva (São Benedito)</h4><p>Música, artes, teatro, literatura, artesanato, geração de renda. Não realiza atendimento clínico ou psiquiátrico.</p></div>
+  </div>
+  <div class="psec">
+    <h3>Fluxo de referência regional</h3>
+    <div class="pcard">
+      <ol class="fluxo">
+        <li><strong>Porta de entrada:</strong> UBS ou demanda espontânea no CAPS</li>
+        <li><strong>Acolhimento:</strong> equipe CAPS avalia e define PTS (Projeto Terapêutico Singular)</li>
+        <li><strong>Vulnerabilidade social:</strong> articulação com CRAS / CREAS</li>
+        <li><strong>Crise grave:</strong> encaminhamento à UPA 24h de Tianguá</li>
+        <li><strong>Internação psiquiátrica:</strong> regulação pelo CROSS (Fortaleza)</li>
+        <li><strong>Violência doméstica:</strong> CAMI (Ibiapina) ou CREAS</li>
+        <li><strong>Dependência química:</strong> CAPS AD Tianguá / AA Ibiapina</li>
+        <li><strong>Pós-alta:</strong> retorno ao CAPS de referência com PTS atualizado</li>
+      </ol>
+    </div>
+  </div>
+  <p class="fonte">Fonte: Mapeamento RAPS — Projeto de Extensão FACIBI 2026</p>
+</div>
+
+<!-- DADOS -->
+<div class="sec" id="dados">
+  <div class="stit">Dados e Indicadores</div>
+  <div class="ssub">Panorama do mapeamento — 110 formulários respondidos por estudantes de Psicologia</div>
+
+  <!-- INSIGHT CARDS -->
+  <div class="insights-grid" style="margin-bottom:1.5rem">
+    <div class="insight-card good">
+      <div class="insight-label">Cobertura UBS</div>
+      <div class="insight-val">100%</div>
+      <div class="insight-sub">Todos os 5 municípios possuem atenção básica</div>
+    </div>
+    <div class="insight-card good">
+      <div class="insight-label">CAPS disponíveis</div>
+      <div class="insight-val">4</div>
+      <div class="insight-sub">3 em Tianguá e Ibiapina, 1 em Viçosa</div>
+    </div>
+    <div class="insight-card warn">
+      <div class="insight-label">Lacuna crítica</div>
+      <div class="insight-val">São Benedito</div>
+      <div class="insight-sub">Sem CAPS ou hospital próprio mapeado</div>
+    </div>
+    <div class="insight-card info">
+      <div class="insight-label">Polo regional</div>
+      <div class="insight-val">Tianguá</div>
+      <div class="insight-sub">Única UPA 24h + CAPS II + CAPS AD da microrregião</div>
+    </div>
+  </div>
+
+  <div class="kpi">
+    <div class="kbox"><b>110</b><span>respostas</span></div>
+    <div class="kbox"><b>5</b><span>cidades</span></div>
+    <div class="kbox"><b>4</b><span>CAPS ativos</span></div>
+    <div class="kbox"><b>1</b><span>UPA 24h</span></div>
+    <div class="kbox"><b>3</b><span>hospitais</span></div>
+    <div class="kbox"><b>55+</b><span>UBS / PSFs</span></div>
+    <div class="kbox"><b>10+</b><span>CRAS / CREAS</span></div>
+    <div class="kbox"><b>5+</b><span>outros</span></div>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>Respostas por município</h4>
+    <div class="bar-row"><div class="bl">Tianguá</div><div class="bo"><div class="bi" data-w="100"><span>31 — 28,2%</span></div></div></div>
+    <div class="bar-row"><div class="bl">Ubajara</div><div class="bo"><div class="bi" data-w="81"><span>25 — 22,7%</span></div></div></div>
+    <div class="bar-row"><div class="bl">São Benedito</div><div class="bo"><div class="bi" data-w="81"><span>25 — 22,7%</span></div></div></div>
+    <div class="bar-row"><div class="bl">Ibiapina</div><div class="bo"><div class="bi" data-w="71"><span>22 — 20,0%</span></div></div></div>
+    <div class="bar-row"><div class="bl">Viçosa do Ceará</div><div class="bo"><div class="bi" data-w="23"><span>7 — 6,4%</span></div></div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>Distribuição dos equipamentos</h4>
+    <div class="donut-wrap">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#e8f0ec" stroke-width="28"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#1a5c3a" stroke-width="28" stroke-dasharray="266 377" stroke-dashoffset="94"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#7c3aed" stroke-width="28" stroke-dasharray="48 377" stroke-dashoffset="-172"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#0ea5e9" stroke-width="28" stroke-dasharray="24 377" stroke-dashoffset="-220"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#16a34a" stroke-width="28" stroke-dasharray="19 377" stroke-dashoffset="-244"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#ca8a04" stroke-width="28" stroke-dasharray="14 377" stroke-dashoffset="-263"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#dc2626" stroke-width="28" stroke-dasharray="5 377" stroke-dashoffset="-277"/>
+        <text x="80" y="75" text-anchor="middle" font-family="Playfair Display,serif" font-size="22" fill="var(--g2)">78</text>
+        <text x="80" y="90" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="var(--sub)">equipamentos</text>
+      </svg>
+      <div class="donut-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#1a5c3a"></div>UBS / PSF — 55+ (70,5%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>CRAS / CREAS — 10+ (12,8%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#0ea5e9"></div>Outros — 5+ (6,4%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>CAPS — 4 (5,1%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ca8a04"></div>Hospitais — 3 (3,8%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div>UPA — 1 (1,3%)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>Cobertura por município</h4>
+    <div class="radial-grid">
+      <div class="radial-item">
+        <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#16a34a" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="50" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">3/5</text></svg>
+        <div class="radial-label">Com CAPS</div><div class="radial-val">60%</div>
+      </div>
+      <div class="radial-item">
+        <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#ca8a04" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="40" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">4/5</text></svg>
+        <div class="radial-label">Com Hospital</div><div class="radial-val">80%</div>
+      </div>
+      <div class="radial-item">
+        <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#1a5c3a" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="1" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">5/5</text></svg>
+        <div class="radial-label">Com UBS</div><div class="radial-val">100%</div>
+      </div>
+      <div class="radial-item">
+        <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#dc2626" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="160" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">1/5</text></svg>
+        <div class="radial-label">Com UPA</div><div class="radial-val">20%</div>
+      </div>
+    </div>
+  </div>
+  <p class="fonte">Fonte: Mapeamento da RAPS — Projeto de Extensão FACIBI, Alunos de Psicologia 7º semestre. 2026</p>
+</div>
+
+</main>
+
+<script>
+const CARDS=[
+  {type:'upa',search:'upa urgência emergência tianguá 24h samu triagem crise psiquiátrica 24 horas',badge:'UPA 24h',badgeCls:'bupa',title:'UPA 24h',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'24 horas / 7 dias',phone:'(88) 3671-2100',tags:['Todas as idades','Urgência','Emergência'],acesso:'Demanda espontânea / SAMU 192',obs:'Referência de urgência para toda a microrregião',modal:{badge:'UPA 24h',badgeBg:'#fee2e2',badgeColor:'#7f1d1d',title:'UPA 24h de Tianguá',city:'Tianguá — CE',lat:-3.7362,lng:-40.9908,phone:'(88) 3671-2100',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / SAMU 192',obs:'Referência de urgência e emergência para toda a microrregião da Serra da Ibiapaba',services:['Urgência e emergência geral','Estabilização de pacientes graves','Triagem e classificação de risco','Regulação para internação (CROSS)','Suporte para crise psiquiátrica aguda'],specs:['Atende todas as faixas etárias','SAMU 192 como porta de entrada em crise','Funciona como referência noturna e fim de semana','Leitos de observação e estabilização'],aiContext:'urgência emergência crise 24h tianguá'}},
+  {type:'caps',search:'caps psicossocial psicoterapia psiquiatria tianguá grupos terapêuticos saúde mental adultos oficinas visita domiciliar',badge:'CAPS II',badgeCls:'baps',title:'CAPS II — Centro de Atenção Psicossocial',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h–17h',tags:['Adultos','Saúde mental'],acesso:'Demanda espontânea ou encaminhamento por UBS',modal:{badge:'CAPS II',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS II — Centro de Atenção Psicossocial',city:'Tianguá — CE',lat:-3.7350,lng:-40.9905,horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento por UBS',services:['Consulta psiquiátrica','Psicoterapia individual e grupal','Grupos terapêuticos','Visita domiciliar','Oficinas terapêuticas','Projeto Terapêutico Singular (PTS)'],specs:['Referência regional — cobre municípios vizinhos sem CAPS','Atende adultos com transtornos mentais graves','Contato via Instagram @capsadtiangua'],aiContext:'saúde mental psiquiatria terapia adultos tianguá referência regional'}},
+  {type:'caps',search:'caps ad álcool drogas dependência química tianguá redução de danos acolhimento',badge:'CAPS AD',badgeCls:'baps',title:'CAPS AD — Álcool e Drogas',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h–17h',phone:'(88) 99311-1511',tags:['Adultos','Álcool e Drogas','Redução de danos'],acesso:'Demanda espontânea ou encaminhamento',modal:{badge:'CAPS AD',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS AD — Álcool e Drogas',city:'Tianguá — CE',lat:-3.7355,lng:-40.9912,phone:'(88) 99311-1511',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento',services:['Acolhimento e escuta qualificada','Redução de danos','Grupos de apoio','Atendimento familiar','Enfermagem','Educação física'],specs:['Especializado em álcool e outras drogas','Tel. alternativo: (88) 99311-2902'],aiContext:'álcool drogas dependência química redução danos tianguá'}},
+  {type:'ubs',search:'ubs atenção básica tianguá família agendamento csu maria costa',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · 20+ unidades',horario:'Seg–Sex, 07h–17h',tags:['Todas as idades','Famílias'],acesso:'Demanda espontânea / Agendamento',obs:'Nem todas possuem insumos para tabagismo',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — Tianguá',city:'Tianguá — CE · 20+ unidades',lat:-3.7370,lng:-40.9910,horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea / Agendamento',obs:'Nem todas possuem insumos para tratamento de tabagismo',services:['CSU Maria Costa','Centro de Saúde I e III','UBS Dionila','UBS Valdo Dourado','UBS Tabainha','UBS Frecheiras','UBS Itaperacema','UBS Araticum e outras'],specs:['Atenção básica à saúde para todas as faixas etárias','31 respostas coletadas no mapeamento'],aiContext:'atenção básica família consulta agendamento tianguá'}},
+  {type:'hospital',search:'hospital tianguá maternidade madalena nunes psiquiátrico internação cirurgia 24h',badge:'Hospital',badgeCls:'bhos',title:'Hospital e Maternidade Madalena Nunes',city:'Tianguá',cityDetail:'Tianguá — CE · Adm. São Camilo',horario:'24 horas / 7 dias',phone:'(88) 3671-2100',tags:['Todas as idades','Urgência','Leitos psiquiátricos'],acesso:'Demanda espontânea / Regulação CROSS',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital e Maternidade Madalena Nunes',city:'Tianguá — CE',lat:-3.7341,lng:-40.9899,phone:'(88) 3671-2100',address:'Rua Assembleia de Deus, Centro, Tianguá',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',obs:'Hospital de referência regional com leitos psiquiátricos',services:['Anestesiologia','Cirurgia Geral','Clínica Médica','Ginecologia e Obstetrícia','Neonatologia','Ortopedia','Pediatria','Radiologia','Internação psiquiátrica'],specs:['Leitos psiquiátricos disponíveis','Referência para internação via CROSS','Maternidade de referência regional'],aiContext:'internação psiquiátrica hospital maternidade cirurgia tianguá'}},
+  {type:'hospital',search:'hospital viçosa ceará urgência internação samu',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal de Viçosa do Ceará',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'24 horas / 7 dias',phone:'(88) 3632-1242',tags:['Todas as idades','Urgência'],acesso:'Demanda espontânea / Encaminhamento UBS / SAMU',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal de Viçosa do Ceará',city:'Viçosa do Ceará — CE',lat:-3.5611,lng:-41.0913,phone:'(88) 3632-1242',address:'Av. José Figueira, SN, Centro, Viçosa do Ceará',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Encaminhamento UBS / SAMU',services:['Atendimento médio e alta complexidade','Urgência e emergência','Internações clínicas e cirúrgicas','Observação e estabilização'],specs:['Referência municipal para urgência','Atende toda a população de Viçosa do Ceará'],aiContext:'urgência hospital internação viçosa ceará'}},
+  {type:'caps',search:'caps psicossocial viçosa ceará saúde mental psicologia psiquiatria grupos',badge:'CAPS',badgeCls:'baps',title:'Centro de Atenção Psicossocial',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'Seg–Sex, 07h–17h',phone:'(88) 3632-1278',tags:['Adultos','Saúde mental'],acesso:'Demanda espontânea ou encaminhamento',modal:{badge:'CAPS',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'Centro de Atenção Psicossocial',city:'Viçosa do Ceará — CE',lat:-3.5617,lng:-41.0925,phone:'(88) 3632-1278',address:'Rua Fontenele Sobrinho, 1524, Centro',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento',services:['Atendimento psicológico','Consulta psiquiátrica','Grupos terapêuticos','Visita domiciliar'],specs:['Atende adultos com sofrimento psíquico','7 respostas coletadas no mapeamento'],aiContext:'saúde mental psicologia psiquiatria viçosa ceará'}},
+  {type:'cras',search:'cras suas paif scfv cadunico bpc famílias viçosa vulnerabilidade assistência social',badge:'CRAS',badgeCls:'bcra',title:'CRAS Sede — Viçosa do Ceará',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'Seg–Sex 07h–17h',phone:'(88) 3632-1119',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Sede — Viçosa do Ceará',city:'Viçosa do Ceará — CE',lat:-3.5620,lng:-41.0918,phone:'(88) 3632-1119',email:'crassedevicosace@hotmail.com',horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea · Porta do SUAS',services:['PAIF','SCFV','CadÚnico','BPC','Encaminhamentos para a rede'],specs:['Proteção Social Básica','Atende famílias em situação de vulnerabilidade'],aiContext:'assistência social famílias cadunico bpc vulnerabilidade viçosa'}},
+  {type:'ubs',search:'ubs são benedito família abc miguel pedro agendamento',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — São Benedito',city:'São Benedito',cityDetail:'São Benedito — CE · 17+ unidades',horario:'Seg–Sex 07h30–17h',tags:['Todas as idades','Famílias'],acesso:'Demanda espontânea / Agendamento',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — São Benedito',city:'São Benedito — CE · 17+ unidades',lat:-4.0459,lng:-40.8652,horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea / Agendamento',services:['UBS ABC','Miguel Pedro','Benedito Arthur','João Barros','Jussara','Inhuçu','Pedra de Coco','Lagoa','Inharé e outras'],specs:['Atenção básica · 25 respostas coletadas'],aiContext:'atenção básica família consulta são benedito'}},
+  {type:'cras',search:'cras creas são benedito assistência social paif paefi vulnerabilidade risco violência',badge:'CRAS / CREAS',badgeCls:'bcra',title:'CRAS Antônio Furtado + CRAS Damião Jorge + CREAS',city:'São Benedito',cityDetail:'São Benedito — CE',horario:'Seg–Sex 07h30–17h',tags:['Famílias','Vulnerabilidade'],acesso:'Demanda espontânea / Encaminhamento',modal:{badge:'CRAS / CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Antônio Furtado + Damião Jorge + CREAS',city:'São Benedito — CE',lat:-4.0463,lng:-40.8658,horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea / Encaminhamento',services:['PAIF','SCFV','PAEFI','CadÚnico','BPC','Equipe Volante','Acolhimento institucional'],specs:['CRAS = Proteção Básica · CREAS = Proteção Especial'],aiContext:'assistência social vulnerabilidade risco violência são benedito'}},
+  {type:'cen',search:'centro convivência são benedito cultura arte música teatro inclusão social',badge:'Centro de Convivência',badgeCls:'bcen',title:'Centro de Convivência Luís Francisco de Paiva',city:'São Benedito',cityDetail:'São Benedito — CE',tags:['Todas as idades','Inclusão social'],acesso:'Demanda espontânea',obs:'Foco em convivência e cultura — sem atendimento clínico',modal:{badge:'Centro de Convivência',badgeBg:'#e0f2fe',badgeColor:'#0c4a6e',title:'Centro de Convivência Luís Francisco de Paiva',city:'São Benedito — CE',lat:-4.0455,lng:-40.8645,address:'Dep. Vicente Ribeiro, Centro',horario:'Seg–Sex (horário comercial)',acesso:'Demanda espontânea',obs:'Foco em convivência e cultura — não realiza atendimento clínico',services:['Música e artes','Teatro','Literatura','Artesanato','Geração de renda'],specs:['Equipamento de inclusão social — voltado a todas as idades'],aiContext:'cultura arte inclusão social são benedito convivência'}},
+  {type:'caps',search:'caps ibiapina psicossocial dependência química grupos oficinas visita domiciliar',badge:'CAPS',badgeCls:'baps',title:'Centro de Atenção Psicossocial',city:'Ibiapina',cityDetail:'Ibiapina — CE',horario:'Seg–Sex, 07h–17h',tags:['Adultos','Saúde mental','Dependência química'],acesso:'Demanda espontânea ou referência por UBS/CRAS',modal:{badge:'CAPS',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'Centro de Atenção Psicossocial',city:'Ibiapina — CE',lat:-3.9221,lng:-40.8919,address:'Rua Luis B. de Lima, 300 — José Avelino Portela',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou referência por UBS/CRAS',services:['Acolhimento e escuta','Atendimento individual multiprofissional','Grupos terapêuticos','Oficinas','Visita domiciliar','Atendimento para dependência química'],specs:['Atende adultos com transtornos mentais e dependência química','22 respostas coletadas'],aiContext:'saúde mental dependência química ibiapina adultos terapia'}},
+  {type:'hospital',search:'hospital ibiapina wanderlene internação cirurgia 24h regulação',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal Maria Wanderlene Negreiros',city:'Ibiapina',cityDetail:'Ibiapina — CE',horario:'24 horas / 7 dias',tags:['Todas as idades','Internação'],acesso:'Demanda espontânea / Regulação CROSS',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal Maria Wanderlene Negreiros',city:'Ibiapina — CE',lat:-3.9215,lng:-40.8912,address:'Rua Dep. Fernando Melo, Centro, Ibiapina',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',services:['Cirurgia geral','Internação clínica','Serviços gerais','Estabilização e encaminhamento'],specs:['Referência hospitalar para Ibiapina e região sul da Serra'],aiContext:'internação hospital cirurgia ibiapina'}},
+  {type:'cras',search:'cras ibiapina pedrinhas alto lindo estádio paif scfv cadunico famílias',badge:'CRAS',badgeCls:'bcra',title:'CRAS Pedrinhas + CRAS Alto Lindo + CRAS Estádio',city:'Ibiapina',cityDetail:'Ibiapina — CE',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Pedrinhas + Alto Lindo + Estádio',city:'Ibiapina — CE',lat:-3.9230,lng:-40.8930,horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea · Porta do SUAS',services:['PAIF','SCFV','CadÚnico e BPC','Encaminhamentos para rede'],specs:['3 unidades CRAS cobrindo diferentes territórios de Ibiapina'],aiContext:'assistência social famílias ibiapina cras cadunico'}},
+  {type:'cen',search:'cami mulher violência doméstica ibiapina disque 100 psicologia advocacia nutrição',badge:'Atenção à Mulher',badgeCls:'baas',title:'CAMI — Casa de Atendimento à Mulher Ibiapinense',city:'Ibiapina',cityDetail:'Ibiapina — CE',tags:['Mulheres','Violência doméstica'],acesso:'Demanda espontânea / Disque 100',modal:{badge:'Atenção à Mulher',badgeBg:'#fce7f3',badgeColor:'#831843',title:'CAMI — Casa de Atendimento à Mulher Ibiapinense',city:'Ibiapina — CE',lat:-3.9218,lng:-40.8922,address:'Rua Sargento João Gomes Neto, Centro',horario:'Seg–Sex (horário comercial)',acesso:'Demanda espontânea / Denúncias: Disque 100',services:['Atendimento psicológico','Assistência social','Advocacia','Nutrição','Cursos de autonomia econômica','Grupo reflexivo para homens agressores'],specs:['Voltado exclusivamente para mulheres','Denúncias: Disque 100 (gratuito e sigiloso)'],aiContext:'violência mulher apoio psicológico jurídico ibiapina'}},
+  {type:'hospital',search:'hospital ubajara francisca belarmino cirurgia campanhas prevenção internação',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal Francisca Belarmino da Costa',city:'Ubajara',cityDetail:'Ubajara — CE',horario:'24 horas / 7 dias',tags:['Todas as idades','Cirurgia'],acesso:'Demanda espontânea / Regulação',obs:'Forte atuação em campanhas mensais de prevenção',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal Francisca Belarmino da Costa',city:'Ubajara — CE',lat:-3.8503,lng:-40.9073,email:'hospitalmunicipalubj2020@gmail.com',address:'Rua Antônio Barros, 173, Ubajara',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',obs:'Forte atuação em campanhas mensais de prevenção à saúde',services:['Cirurgias','Internação clínica','Urgência e estabilização','Campanhas preventivas mensais'],specs:['Referência hospitalar para Ubajara e região','25 respostas coletadas'],aiContext:'internação hospital cirurgia prevenção ubajara'}},
+  {type:'ubs',search:'ubs psf ubajara família pitanga chapada cajueiro',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — Ubajara',city:'Ubajara',cityDetail:'Ubajara — CE · 18 unidades PSF',horario:'Seg–Sex 07h–17h',phone:'(88) 3634-2364',tags:['Todas as idades','Comunidade'],acesso:'Demanda espontânea / Agendamento',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — Ubajara',city:'Ubajara — CE · 18 unidades PSF',lat:-3.8498,lng:-40.9065,phone:'(88) 3634-2364',horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea / Agendamento',services:['PSF Pitanga','Maria Graciema','Chapada','Araticum','Cajueiro','Itaperacema','Potós','Moitinga','Centro de Saúde e outros'],specs:['18 unidades PSF mapeadas'],aiContext:'atenção básica família consulta ubajara'}},
+  {type:'cras',search:'cras creas ubajara crisântema maria moreira paefi proteção especial famílias',badge:'CRAS / CREAS',badgeCls:'bcra',title:'CRAS Crisântema + CRAS III + CRAS Maria Moreira + CREAS',city:'Ubajara',cityDetail:'Ubajara — CE',horario:'Seg–Sex 07h30–17h',phone:'(88) 3634-2322',tags:['Famílias','Vulnerabilidade'],acesso:'Demanda espontânea · Porta do SUAS',obs:'Alta demanda de atendimento registrada',modal:{badge:'CRAS / CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Crisântema + CRAS III + CRAS Maria Moreira + CREAS',city:'Ubajara — CE',lat:-3.8510,lng:-40.9080,phone:'(88) 3634-2322',horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea · Porta do SUAS',obs:'Alta demanda de atendimento registrada',services:['PAIF','SCFV','PAEFI','CadÚnico','BPC','Acolhimento institucional','Proteção Especial'],specs:['4 equipamentos socioassistenciais em Ubajara'],aiContext:'assistência social vulnerabilidade risco paefi ubajara cras'}}
+];
+
+const RAPS_DATA=[
+  {cidade:'Tianguá',ubs:20,caps:2,hospital:1,upa:1,cras:1,outros:1,respostas:31},
+  {cidade:'Viçosa do Ceará',ubs:3,caps:1,hospital:1,upa:0,cras:2,outros:0,respostas:7},
+  {cidade:'São Benedito',ubs:17,caps:0,hospital:0,upa:0,cras:3,outros:2,respostas:25},
+  {cidade:'Ibiapina',ubs:12,caps:1,hospital:1,upa:0,cras:3,outros:2,respostas:22},
+  {cidade:'Ubajara',ubs:18,caps:0,hospital:1,upa:0,cras:4,outros:0,respostas:25}
+];
+
+const SVG_CLK='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+const SVG_PHN='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.23-1.23a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
+const SVG_PIN='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// === RENDER CARDS ===
+function renderCards(){
+  const g=document.getElementById('grid');
+  g.innerHTML='';
+  CARDS.forEach((c,i)=>{
+    const div=document.createElement('div');
+    div.className='card';
+    div.dataset.t=c.type;
+    div.dataset.search=c.search;
+    div.dataset.idx=i;
+    let rows='';
+    if(c.horario)rows+=`<div class="row">${SVG_CLK}${esc(c.horario)}</div>`;
+    if(c.phone)rows+=`<div class="row">${SVG_PHN}${esc(c.phone)}</div>`;
+    const tags=c.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+    div.innerHTML=`
+      <span class="badge ${c.badgeCls}">${esc(c.badge)}</span>
+      <h3>${esc(c.title)}</h3>
+      <div class="cid">${SVG_PIN}${esc(c.cityDetail)}</div>
+      ${rows?`<div class="card-rows">${rows}</div>`:''}
+      <div class="tags">${tags}</div>
+      ${c.acesso?`<div class="acesso">${esc(c.acesso)}</div>`:''}
+      ${c.obs?`<div class="obs">${esc(c.obs)}</div>`:''}
+      <span class="card-hint">Ver detalhes →</span>
+    `;
+    div.addEventListener('click',()=>openPlanet(c.modal));
+    g.appendChild(div);
+  });
+  document.querySelectorAll('.card').forEach(c=>cardObs.observe(c));
+}
+
+const cardObs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('vis'),i*45);
+      cardObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.05});
+
+// === MAPA ===
+let mapInst=null,mapTimer=null;
+function buildMap(lat,lng,title){
+  if(mapInst){try{mapInst.remove()}catch(e){}mapInst=null;}
+  const el=document.getElementById('modal-map');
+  el.innerHTML='';
+  if(typeof L==='undefined'){
+    el.innerHTML='<div class="map-placeholder"><span style="font-size:1.5rem"></span><span>Mapa indisponível</span></div>';
+    return;
+  }
+  try{
+    mapInst=L.map('modal-map',{zoomControl:true,scrollWheelZoom:false}).setView([lat,lng],15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(mapInst);
+    const icon=L.divIcon({className:'',html:'<div style="background:#1a5c3a;color:#fff;border-radius:50% 50% 50% 0;width:34px;height:34px;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);font-size:.95rem">H</span></div>',iconSize:[34,34],iconAnchor:[17,34],popupAnchor:[0,-38]});
+    L.marker([lat,lng],{icon}).addTo(mapInst).bindPopup('<strong style="font-size:.84rem">'+esc(title)+'</strong>',{closeButton:false}).openPopup();
+    setTimeout(()=>{if(mapInst)mapInst.invalidateSize()},300);
+    setTimeout(()=>{if(mapInst)mapInst.invalidateSize()},700);
+  }catch(err){
+    document.getElementById('modal-map').innerHTML='<div class="map-placeholder"><span style="font-size:1.5rem"></span><span>Mapa indisponível</span></div>';
+  }
+}
+
+// === MODAL ===
+let currentModalData=null;
+function openPlanet(d){
+  currentModalData=d;
+  const ov=document.getElementById('planet-overlay');
+  const b=document.getElementById('m-badge');
+  b.textContent=d.badge;b.style.background=d.badgeBg||'#ddd';b.style.color=d.badgeColor||'#333';
+  document.getElementById('m-title').textContent=d.title;
+  document.getElementById('m-city-text').textContent=d.city;
+  const g=document.getElementById('m-grid');
+  g.innerHTML='';
+  [{label:'Horário',val:d.horario},{label:'Telefone',val:d.phone},{label:'E-mail',val:d.email,href:d.email?'mailto:'+d.email:null},{label:'Endereço',val:d.address}].forEach(f=>{
+    if(!f.val)return;
+    const div=document.createElement('div');
+    div.className='info-item';
+    div.innerHTML=`<div class="ilabel">${f.label}</div><div class="ival">${f.href?`<a href="${f.href}">${esc(f.val)}</a>`:esc(f.val)}</div>`;
+    g.appendChild(div);
+  });
+  const acc=document.getElementById('m-access');
+  if(d.acesso){acc.textContent=d.acesso;acc.style.display='';}else acc.style.display='none';
+  const obs=document.getElementById('m-obs');
+  if(d.obs){obs.textContent=d.obs;obs.style.display='';}else obs.style.display='none';
+  const sw=document.getElementById('m-services-wrap');
+  const sl=document.getElementById('m-services');
+  if(d.services&&d.services.length){sl.innerHTML=d.services.map(s=>`<li>${esc(s)}</li>`).join('');sw.style.display='';}else sw.style.display='none';
+  const spw=document.getElementById('m-specs-wrap');
+  const spl=document.getElementById('m-specs');
+  if(d.specs&&d.specs.length){spl.innerHTML=d.specs.map(s=>`<li>${esc(s)}</li>`).join('');spw.style.display='';}else spw.style.display='none';
+  document.getElementById('m-fonte').textContent=d.fonte||'';
+  document.getElementById('m-ai-text').innerHTML='<div class="ai-thinking"><span></span><span></span><span></span> Cruzando informações...</div>';
+  const askBtn=document.querySelector('.modal-ai-ask');
+  if(askBtn){askBtn.disabled=false;askBtn.textContent='Perguntar mais sobre este serviço ↗';}
+  document.body.style.overflow='hidden';
+  ov.classList.add('open');
+  document.getElementById('planet-modal').scrollTop=0;
+  document.addEventListener('keydown',escHandler);
+  if(mapTimer)clearTimeout(mapTimer);
+  if(d.lat&&d.lng){mapTimer=setTimeout(()=>buildMap(d.lat,d.lng,d.title),160);}
+  else document.getElementById('modal-map').innerHTML='';
+  setTimeout(()=>generateModalAI(d),400);
+}
+
+function closePlanet(){
+  document.getElementById('planet-overlay').classList.remove('open');
+  document.body.style.overflow='';
+  document.removeEventListener('keydown',escHandler);
+  if(mapTimer){clearTimeout(mapTimer);mapTimer=null;}
+  if(mapInst){try{mapInst.remove()}catch(e){}mapInst=null;}
+  currentModalData=null;
+}
+function escHandler(e){if(e.key==='Escape')closePlanet();}
+
+// === ASSISTENTE LOCAL ===
+const CITY_TERMS={
+  'tiangua':'Tianguá',
+  'vicosa':'Viçosa do Ceará',
+  'vicosa do ceara':'Viçosa do Ceará',
+  'sao benedito':'São Benedito',
+  'ibiapina':'Ibiapina',
+  'ubajara':'Ubajara'
+};
+
+const INTENT_RULES=[
+  {id:'urgencia',label:'urgência ou crise',terms:['urgencia','emergencia','crise','surto','grave','24h','24 horas','samu','risco','socorro'],types:{upa:8,hospital:5,caps:2}},
+  {id:'saude-mental',label:'saúde mental',terms:['psicologico','psicologia','psiquiatria','psiquiatrico','depressao','ansiedade','transtorno','sofrimento','terapia','mental'],types:{caps:8,ubs:4,cras:3,cen:2}},
+  {id:'alcool-drogas',label:'álcool e outras drogas',terms:['alcool','drogas','dependencia','quimica','adiccao','reducao','danos'],types:{caps:8,cen:2,ubs:1}},
+  {id:'violencia',label:'situação de violência ou violação de direitos',terms:['violencia','mulher','domestica','agressao','abuso','ameaca','risco','creas','denuncia'],types:{cras:6,cen:2,caps:2}},
+  {id:'social',label:'assistência social',terms:['cadunico','cadastro','bolsa','beneficio','bpc','paif','scfv','familia','vulnerabilidade','social','cras','creas'],types:{cras:8,cen:2}},
+  {id:'crianca',label:'criança ou adolescente',terms:['crianca','adolescente','jovem','infantil','menor'],types:{ubs:5,cras:4,caps:1}},
+  {id:'internacao',label:'internação ou avaliação hospitalar',terms:['internacao','internar','leito','cirurgia','hospital','maternidade','observacao'],types:{hospital:8,upa:4,caps:2}},
+  {id:'basica',label:'atenção básica',terms:['consulta','ubs','psf','vacina','familia','agendamento','rotina','posto'],types:{ubs:8}}
+];
+
+function generateModalAI(d){
+  const el=document.getElementById('m-ai-text');
+  const kind=serviceKindText(d.badge);
+  const entry=d.acesso||'procure a unidade para confirmar a porta de entrada';
+  const services=(d.services||[]).slice(0,3).join(', ');
+  const tip=getServiceTip(d);
+  el.textContent=`Pelo mapeamento, este serviço é indicado para ${kind} em ${d.city}. A entrada costuma ser por ${entry}. ${services?`As principais ofertas registradas são: ${services}. `:''}${tip}`;
+}
+
+function askMoreAboutCurrent(){
+  if(!currentModalData)return;
+  const el=document.getElementById('m-ai-text');
+  const btn=document.querySelector('.modal-ai-ask');
+  el.innerHTML='<div class="ai-thinking"><span></span><span></span><span></span> Analisando este serviço...</div>';
+  if(btn)btn.disabled=true;
+  setTimeout(()=>{
+    el.textContent=generateServiceDeepDive(currentModalData);
+    if(btn){
+      btn.disabled=false;
+      btn.textContent='Atualizar resposta do assistente';
+    }
+  },360);
+}
+
+let currentFilter='',currentSearch='',debounceTimer;
+
+function sendAI(){
+  const q=document.getElementById('ai-query').value.trim();
+  if(!q)return;
+  const respEl=document.getElementById('ai-response');
+  const txtEl=document.getElementById('ai-response-text');
+  const cardsEl=document.getElementById('ai-result-cards');
+  respEl.classList.add('visible');
+  txtEl.innerHTML='<div class="ai-thinking"><span></span><span></span><span></span> Cruzando palavras-chave...</div>';
+  cardsEl.innerHTML='';
+
+  setTimeout(()=>{
+    const analysis=analyzeNeed(q);
+    txtEl.textContent=analysis.message;
+    cardsEl.innerHTML=analysis.cards.map(item=>`
+      <div class="ai-result-card" onclick="openPlanet(CARDS[${CARDS.indexOf(item.card)}].modal)">
+        <span class="arc-badge ${item.card.badgeCls}">${esc(item.card.badge)}</span>
+        <div class="arc-name">${esc(item.card.title)}</div>
+        <div class="arc-city">${esc(item.card.city)}</div>
+        <div class="arc-city">${esc(item.reason)}</div>
+      </div>
+    `).join('');
+  },320);
+}
+
+function quickAsk(el){
+  document.getElementById('ai-query').value=el.textContent.trim();
+  sendAI();
+}
+
+function analyzeNeed(q){
+  const normalized=norm(q);
+  const tokens=tokenize(normalized);
+  const city=detectCity(normalized);
+  const intents=detectIntents(normalized,tokens);
+  const scored=CARDS.map(card=>scoreCard(card,normalized,tokens,city,intents))
+    .filter(item=>item.score>0)
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,4);
+  const fallback=scored.length?scored:CARDS
+    .filter(c=>!city||c.city===city)
+    .slice(0,3)
+    .map(card=>({card,score:1,reason:'opção disponível no território mapeado'}));
+  const intentText=intents.length?intents.map(i=>i.label).slice(0,2).join(' e '):'sua descrição';
+  const cityText=city?` em ${city}`:' na Serra da Ibiapaba';
+  const first=fallback[0]?.card;
+  const safety=INTENT_RULES.some(rule=>rule.id==='urgencia'&&intents.includes(rule))
+    ?' Em risco imediato, procure a UPA 24h, hospital ou SAMU 192.'
+    :'';
+  return {
+    message:first
+      ?`Pelo que você descreveu, a prioridade parece ser ${intentText}${cityText}. Recomendo começar por ${first.title}; abaixo estão as opções com maior compatibilidade pelo cruzamento de cidade, tipo de serviço e palavras-chave.${safety}`
+      :`Não encontrei uma correspondência forte, mas você pode tentar termos como cidade, urgência, CAPS, CRAS, UBS, álcool/drogas ou violência.${safety}`,
+    cards:fallback
+  };
+}
+
+function scoreCard(card,query,tokens,city,intents){
+  const hay=norm([card.title,card.city,card.cityDetail,card.badge,card.search,(card.tags||[]).join(' '),card.acesso,card.obs,card.modal?.aiContext,(card.modal?.services||[]).join(' '),(card.modal?.specs||[]).join(' ')].join(' '));
+  let score=0;
+  const reasons=[];
+  tokens.forEach(t=>{if(t.length>2&&hay.includes(t))score+=2;});
+  if(city&&card.city===city){score+=8;reasons.push('mesma cidade');}
+  else if(city){score-=2;}
+  intents.forEach(rule=>{
+    const weight=rule.types[card.type]||0;
+    if(weight){score+=weight;reasons.push(rule.label);}
+    rule.terms.forEach(term=>{if(query.includes(term)&&hay.includes(term))score+=2;});
+  });
+  if(query.includes('24')&&card.horario&&norm(card.horario).includes('24'))score+=4;
+  if(card.type==='upa'&&intents.some(rule=>rule.id==='urgencia'))score+=5;
+  if(card.type==='upa'&&query.includes('crise'))score+=4;
+  return {card,score,reason:reasons.slice(0,2).join(' + ')||'termos compatíveis no mapeamento'};
+}
+
+function detectCity(query){
+  const found=Object.keys(CITY_TERMS)
+    .sort((a,b)=>b.length-a.length)
+    .find(term=>query.includes(term));
+  return found?CITY_TERMS[found]:null;
+}
+
+function detectIntents(query,tokens){
+  return INTENT_RULES.filter(rule=>rule.terms.some(term=>query.includes(term)||tokens.includes(term)));
+}
+
+function tokenize(s){
+  return norm(s).split(/\s+/).filter(t=>t.length>2&&!['para','com','que','uma','moro','preciso','sobre','este','esse','servico','atendimento'].includes(t));
+}
+
+function serviceKindText(badge){
+  const b=norm(badge);
+  if(b.includes('upa'))return'casos de urgência, emergência ou crise que precisam de resposta rápida';
+  if(b.includes('caps'))return'acompanhamento em saúde mental, sofrimento psíquico ou uso de álcool e outras drogas';
+  if(b.includes('hospital'))return'avaliação médica, estabilização, internação ou encaminhamento regulado';
+  if(b.includes('cras'))return'famílias em vulnerabilidade, benefícios, CadÚnico ou proteção social';
+  if(b.includes('mulher'))return'mulheres em situação de violência ou que precisam de apoio psicossocial e jurídico';
+  if(b.includes('ubs'))return'primeiro atendimento, acompanhamento de rotina e encaminhamentos pela atenção básica';
+  return'demandas de cuidado e apoio psicossocial';
+}
+
+function getServiceTip(d){
+  const b=norm(d.badge);
+  if(b.includes('upa')||b.includes('hospital'))return'Em situações graves, acione o SAMU 192 ou procure atendimento imediatamente.';
+  if(b.includes('caps'))return'Leve documentos pessoais e, se houver, encaminhamentos ou receitas anteriores para facilitar o acolhimento.';
+  if(b.includes('cras'))return'Para CadÚnico e benefícios, documentos da família ajudam a agilizar o atendimento.';
+  if(b.includes('mulher'))return'Em risco atual, priorize sua segurança e acione canais de denúncia ou a rede de proteção.';
+  return'Confirme horário e documentos necessários antes de se deslocar.';
+}
+
+function generateServiceDeepDive(d){
+  const services=d.services&&d.services.length?d.services.slice(0,5).join(', '):'serviços registrados no mapeamento da RAPS';
+  const specs=d.specs&&d.specs.length?` Um ponto importante: ${d.specs[0]}.`:'';
+  const access=d.acesso||'procure a unidade para confirmar a forma de entrada';
+  const schedule=d.horario?` O funcionamento informado é ${d.horario}.`:'';
+  const phone=d.phone?` Se possível, confirme antes pelo telefone ${d.phone}.`:'';
+  return `Esse equipamento pode ser uma boa escolha quando a demanda envolve ${serviceKindText(d.badge)}. Para acessar, o caminho indicado é: ${access}.${schedule} No atendimento, procure explicar a situação principal e informe se já existe acompanhamento, encaminhamento, receita ou histórico de crise. No mapeamento, aparecem como ofertas: ${services}.${specs}${phone} ${getServiceTip(d)}`;
+}
+
+// === BUSCA ===
+function handleSearch(q){
+  currentSearch=q;
+  document.getElementById('search-clear-btn').classList.toggle('vis',q.length>0);
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',norm(c.dataset.q||'')===norm(q.trim())));
+  clearTimeout(debounceTimer);
+  debounceTimer=setTimeout(()=>applySearch(q),130);
+}
+
+function chipSearch(el){
+  const q=el.dataset.q;
+  if(el.classList.contains('on')){clearSearch();return;}
+  document.getElementById('search-input').value=q;
+  handleSearch(q);
+}
+
+function applySearch(q){
+  const cards=document.querySelectorAll('.card');
+  const query=norm(q.trim());
+  const terms=tokenize(query);
+  let visible=0;
+  cards.forEach(c=>{
+    const filterMatch=!currentFilter||c.dataset.t===currentFilter;
+    const hay=norm((c.dataset.search||'')+' '+c.textContent);
+    const searchMatch=!query||(terms.length?terms.every(term=>hay.includes(term)):hay.includes(query));
+    const show=filterMatch&&searchMatch;
+    c.style.display=show?'':'none';
+    if(show)visible++;
+  });
+  const countEl=document.getElementById('search-count');
+  const noRes=document.getElementById('no-results');
+  const hint=document.getElementById('search-hint');
+  if(query){
+    countEl.innerHTML=visible>0
+      ?`<b>${visible}</b> serviço${visible!==1?'s':''} encontrado${visible!==1?'s':''} para "<em>${esc(q)}</em>"`
+      :`Nenhum resultado para "<em>${esc(q)}</em>"`;
+    hint.style.display='none';
+    noRes.style.display=visible===0?'block':'none';
+  }else{
+    countEl.textContent='';
+    hint.style.display='';
+    noRes.style.display='none';
+  }
+}
+
+function norm(s){return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w\s]/g,' ')}
+
+function clearSearch(){
+  document.getElementById('search-input').value='';
+  currentSearch='';
+  document.getElementById('search-clear-btn').classList.remove('vis');
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  document.getElementById('search-count').textContent='';
+  document.getElementById('search-hint').style.display='';
+  document.getElementById('no-results').style.display='none';
+  applySearch('');
+}
+
+function fil(t,btn){
+  currentFilter=t;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  applySearch(currentSearch);
+}
+
+// === TOAST ===
+function showToast(msg,dur=3000){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+function enterSite(){
+  const welcome=document.getElementById('welcome-overlay');
+  if(!welcome||welcome.classList.contains('leaving'))return;
+  const btn=welcome.querySelector('.welcome-btn');
+  if(btn){
+    btn.disabled=true;
+    btn.textContent='Entrando...';
+  }
+  welcome.classList.add('leaving');
+  document.body.classList.remove('welcome-lock');
+  setTimeout(()=>{
+    welcome.classList.add('closed');
+    welcome.style.display='none';
+  },780);
+}
+
+// === THEME ===
+function toggleTheme(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('theme-icon').textContent='';
+  document.getElementById('theme-label').textContent=isDark?'Dark':'Light';
+}
+
+// === TABS ===
+function tab(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(id==='dados')setTimeout(animDados,200);
+  if(id==='mapa')animMapa();
+  if(id==='servicos')setTimeout(()=>document.querySelectorAll('.card:not(.vis)').forEach(c=>cardObs.observe(c)),100);
+}
+
+// === ANIMAÇÕES ===
+let barsAnimated=false;
+function animDados(){
+  if(!barsAnimated){
+    barsAnimated=true;
+    document.querySelectorAll('.bi').forEach((b,i)=>setTimeout(()=>{b.style.width=b.dataset.w+'%'},i*90+100));
+  }
+}
+function animMapa(){
+  document.querySelectorAll('.mc').forEach((c,i)=>setTimeout(()=>c.classList.add('vis'),i*80));
+}
+function animateCounters(){
+  document.querySelectorAll('.stat b[data-target]').forEach(el=>{
+    const target=parseInt(el.dataset.target);
+    if(isNaN(target))return;
+    let n=0;
+    const step=Math.max(1,Math.ceil(target/30));
+    const t=setInterval(()=>{n=Math.min(n+step,target);el.textContent=n;if(n>=target)clearInterval(t)},28);
+  });
+}
+
+// === INIT ===
+document.addEventListener('DOMContentLoaded',()=>{
+  renderCards();
+  animateCounters();
+});
+</script>
+</body>
+</html>
