@@ -55,7 +55,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .header-logo-left{position:absolute;left:2rem;top:50%;transform:translateY(-50%);z-index:2;}
 .header-logo-img{width:140px;height:140px;object-fit:contain;filter:drop-shadow(0 4px 20px rgba(0,0,0,.4));animation:none;}
 @keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@media(max-width:700px){.header-logo-left{display:none}}
+@media(max-width:700px){
+  /* mostrar versão menor do logo em telas pequenas */
+  .header-logo-left{display:block;position:relative;left:auto;top:auto;transform:none;z-index:2;margin:0 auto 12px;}
+  .header-logo-img{width:84px;height:auto;object-fit:contain;filter:none}
+}
+
+/* logo fallback when image fails to load */
+.logo-fallback{display:none}
+.header-logo-left.logo-fallback .logo-fallback{display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:12px;background:var(--tag-bg);color:var(--tag-color);font-weight:800}
 /* HEADER */
 header{background:var(--g);color:#fff;padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
 header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% -10%,rgba(78,203,141,.18) 0%,transparent 60%),radial-gradient(ellipse 50% 80% at 80% 110%,rgba(45,138,90,.25) 0%,transparent 60%);pointer-events:none;}
@@ -404,7 +412,11 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 <!-- HEADER -->
 <header>
   <div class="header-logo-left">
-    <img src="capa.png" alt="Símbolo do projeto" class="header-logo-img">
+    <picture>
+      <source media="(max-width:480px)" srcset="capa.png">
+      <img src="capa.png" alt="Símbolo do projeto" class="header-logo-img" onerror="this.style.display='none';this.parentElement.parentElement.classList.add('logo-fallback')">
+    </picture>
+    <div class="logo-fallback">RAPS</div>
   </div>
   <div class="header-eyebrow">Projeto de Extensão · FACIBI 2026</div>
   <div class="logo">Rede de Atenção<br><em>Psicossocial</em> — Serra da Ibiapaba</div>
