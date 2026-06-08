@@ -52,12 +52,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .toggle-thumb{width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:.25s cubic-bezier(.4,0,.2,1)}
 [data-theme="dark"] .toggle-thumb{left:16px;background:#080f0b}
 /* HEADER LOGO */
-.header-logo-left{position:absolute;left:2rem;top:50%;transform:translateY(-50%);z-index:2;}
+.header-logo-left{position:absolute;left:2rem;top:50%;transform:translateY(-50%);z-index:2100;}
 .header-logo-img{width:140px;height:140px;object-fit:contain;filter:drop-shadow(0 4px 20px rgba(0,0,0,.4));animation:none;}
 @keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @media(max-width:700px){
   /* mostrar versão menor do logo em telas pequenas */
-  .header-logo-left{display:block;position:relative;left:auto;top:auto;transform:none;z-index:2;margin:0 auto 12px;}
+  .header-logo-left{display:block;position:relative;left:auto;top:auto;transform:none;z-index:2100;margin:0 auto 12px;}
   .header-logo-img{width:84px;height:auto;object-fit:contain;filter:none}
 }
 
