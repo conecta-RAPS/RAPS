@@ -36,7 +36,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 *{transition:background-color .25s,color .2s,border-color .2s}
 html{ -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale }
-/* make large images scale down on small screens */
 .header-logo-img{max-width:120px;height:auto}
 .theme-toggle,.ai-send,.search-input,.fb,.chip,.ai-chip{touch-action:manipulation}
 body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;font-size:15px;line-height:1.65;font-weight:600}
@@ -51,20 +50,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 [data-theme="dark"] .toggle-track{background:var(--a)}
 .toggle-thumb{width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:.25s cubic-bezier(.4,0,.2,1)}
 [data-theme="dark"] .toggle-thumb{left:16px;background:#080f0b}
-/* HEADER LOGO */
 .header-logo-left{position:absolute;left:2rem;top:50%;transform:translateY(-50%);z-index:2100;}
-.header-logo-img{width:140px;height:140px;object-fit:contain;filter:drop-shadow(0 4px 20px rgba(0,0,0,.4));animation:none;}
-@keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.header-logo-img{width:140px;height:140px;object-fit:contain;filter:drop-shadow(0 4px 20px rgba(0,0,0,.4));}
 @media(max-width:700px){
-  /* mostrar versão menor do logo em telas pequenas */
   .header-logo-left{display:block;position:relative;left:auto;top:auto;transform:none;z-index:2100;margin:0 auto 12px;}
   .header-logo-img{width:84px;height:auto;object-fit:contain;filter:none}
 }
-
-/* logo fallback when image fails to load */
 .logo-fallback{display:none}
 .header-logo-left.logo-fallback .logo-fallback{display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:12px;background:var(--tag-bg);color:var(--tag-color);font-weight:800}
-/* HEADER */
 header{background:var(--g);color:#fff;padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
 header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% -10%,rgba(78,203,141,.18) 0%,transparent 60%),radial-gradient(ellipse 50% 80% at 80% 110%,rgba(45,138,90,.25) 0%,transparent 60%);pointer-events:none;}
 .header-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--a);font-weight:600;margin-bottom:1.2rem;background:rgba(78,203,141,.1);border:1px solid rgba(78,203,141,.25);border-radius:100px;padding:5px 14px;}
@@ -76,7 +69,6 @@ header .sub{margin-top:.6rem;font-size:.84rem;opacity:.82;font-weight:600;letter
 .stat:last-child{border-right:none}
 .stat b{display:block;font-family:'Playfair Display',serif;font-size:2rem;color:var(--a);line-height:1;font-weight:700}
 .stat span{font-size:.68rem;opacity:.55;text-transform:uppercase;letter-spacing:.08em;margin-top:3px;display:block}
-/* AI */
 .ai-hero{background:linear-gradient(135deg,var(--g2) 0%,var(--g) 100%);border-radius:20px;padding:1.6rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
 .ai-hero::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(78,203,141,.2),transparent 70%);}
 .ai-hero-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--a);font-weight:600;margin-bottom:.5rem}
@@ -110,7 +102,6 @@ header .sub{margin-top:.6rem;font-size:.84rem;opacity:.82;font-weight:600;letter
 .ai-thinking span:nth-child(2){animation-delay:.2s}
 .ai-thinking span:nth-child(3){animation-delay:.4s}
 @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
-/* SEARCH */
 .search-wrap{position:relative}
 .search-input{width:100%;padding:.9rem 1rem .9rem 3rem;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);font-family:'Sora',sans-serif;font-size:.9rem;outline:none;transition:.2s;box-shadow:var(--shadow);}
 .search-input:focus{border-color:var(--g3);box-shadow:var(--shadow),0 0 0 3px rgba(45,138,90,.1)}
@@ -118,19 +109,15 @@ header .sub{margin-top:.6rem;font-size:.84rem;opacity:.82;font-weight:600;letter
 .search-clear{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--sub);font-size:.9rem;display:none;padding:4px 6px;border-radius:6px;transition:.15s}
 .search-clear.vis{display:block}
 .search-clear:hover{color:var(--r);background:var(--obs-bg)}
-/* CHIPS */
 .chips-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:.7rem}
 .chip{background:var(--tag-bg);color:var(--tag-color);border-radius:100px;padding:5px 13px;font-size:.75rem;cursor:pointer;border:1px solid var(--border);transition:.15s;font-family:'Sora',sans-serif;user-select:none;display:inline-flex;align-items:center;gap:5px;}
 .chip:hover,.chip.on{background:var(--g2);color:#fff;border-color:var(--g2)}
-/* RESULTS BAR */
 .results-bar{display:flex;align-items:center;justify-content:space-between;margin-top:.7rem;font-size:.75rem;color:var(--sub);min-height:1.2rem}
 .results-bar b{color:var(--g3)}
 [data-theme="dark"] .results-bar b{color:var(--a)}
-/* FILTERS */
 .filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem}
 .fb{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:5px 16px;font-size:.78rem;cursor:pointer;color:var(--sub);font-family:'Sora',sans-serif;transition:.15s;user-select:none;font-weight:700;}
 .fb.on,.fb:hover{background:var(--g2);color:#fff;border-color:var(--g2)}
-/* NAV */
 nav{background:var(--nav-bg);display:flex;overflow-x:auto;position:sticky;top:0;z-index:99;border-bottom:1px solid rgba(255,255,255,.05);scrollbar-width:none;}
 nav::-webkit-scrollbar{display:none}
 nav button{background:none;border:none;color:rgba(255,255,255,.5);padding:.9rem 1.3rem;font-family:'Sora',sans-serif;font-size:.82rem;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;letter-spacing:.01em;}
@@ -141,9 +128,7 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 .sec.on{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-/* GRID */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
-/* CARD */
 .card{background:var(--card-bg);border-radius:16px;border:1px solid var(--border);padding:1.4rem 1.3rem 1.2rem;opacity:0;transform:translateY(16px);transition:box-shadow .25s,border-color .2s,opacity .4s,transform .4s;display:flex;flex-direction:column;position:relative;overflow:hidden;cursor:pointer;}
 .card.vis{opacity:1;transform:translateY(0)}
 .card.hidden-card{display:none}
@@ -153,7 +138,6 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 .card-hint{position:absolute;bottom:0;right:0;background:var(--g2);color:#fff;font-size:.68rem;font-weight:600;padding:5px 13px;border-radius:12px 0 14px 0;opacity:0;transition:.2s;}
 .card:hover .card-hint{opacity:1}
 .highlight{background:rgba(78,203,141,.3);border-radius:3px;padding:0 2px}
-/* BADGES */
 .badge{display:inline-block;font-size:.65rem;font-weight:600;border-radius:8px;padding:3px 10px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.65rem;align-self:flex-start;}
 .bubs{background:#dbeafe;color:#1e3a8a}
 .baps{background:#dcfce7;color:#14532d}
@@ -180,16 +164,13 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 [data-theme="dark"] .acesso{color:var(--a)}
 .obs{border-left:2px solid var(--y);padding:6px 10px;font-size:.75rem;color:#5a4200;margin-top:.5rem;background:var(--obs-bg);border-radius:0 8px 8px 0;}
 [data-theme="dark"] .obs{color:#e8c060}
-/* NO RESULTS */
 .no-results{text-align:center;padding:3rem 1rem;color:var(--sub)}
 .no-results .icon{font-size:2.5rem;margin-bottom:.6rem;display:block;filter:grayscale(1);opacity:.4}
 .no-results h4{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:.3rem;font-weight:500}
 .no-results p{font-size:.82rem}
-/* SECTION TITLES */
 .stit{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--text);margin-bottom:.3rem;font-weight:700;letter-spacing:-.01em}
 .ssub{font-size:.85rem;color:var(--sub);margin-bottom:1.5rem;line-height:1.65;font-weight:600}
 .fonte{font-size:.72rem;color:var(--sub);margin-top:1.5rem;padding-top:.75rem;border-top:1px solid var(--border);opacity:.7}
-/* MODAL */
 #planet-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .4s}
 #planet-overlay.open{opacity:1;pointer-events:all}
 #planet-bg{position:absolute;inset:0;background:rgba(4,12,7,.9);backdrop-filter:blur(8px);opacity:0;transition:opacity .4s}
@@ -228,7 +209,6 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 .modal-ai-ask{background:rgba(78,203,141,.15);border:1px solid rgba(78,203,141,.3);color:var(--a);border-radius:8px;padding:6px 12px;font-size:.76rem;cursor:pointer;font-family:'Sora',sans-serif;transition:.15s;display:inline-flex;align-items:center;gap:5px;font-weight:600;}
 .modal-ai-ask:hover{background:rgba(78,203,141,.25)}
 .modal-ai-ask:disabled{opacity:.65;cursor:wait}
-/* POR CIDADE */
 .mapa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
 .mc{background:var(--card-bg);border-radius:14px;border:1px solid var(--border);padding:1rem 1.1rem;transform:scale(.95);opacity:0;transition:opacity .4s,transform .4s,box-shadow .2s;}
 .mc.vis{opacity:1;transform:scale(1)}
@@ -237,7 +217,6 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 [data-theme="dark"] .mc h4{color:var(--a)}
 .mc li{font-size:.77rem;color:var(--sub);list-style:none;padding:4px 0;border-bottom:1px dashed var(--border)}
 .mc li:last-child{border:none}
-/* PSICO */
 .psec h3{font-family:'Playfair Display',serif;font-size:1.15rem;margin:1.8rem 0 .7rem;color:var(--text);font-weight:700}
 .pcard{background:var(--card-bg);border-radius:12px;border:1px solid var(--border);padding:1.1rem 1.2rem;margin-bottom:.8rem}
 .pcard h4{font-size:.92rem;font-weight:600;color:var(--g2);margin-bottom:.4rem}
@@ -247,7 +226,6 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 .fluxo li{counter-increment:f;list-style:none;padding:.5rem .5rem .5rem 2.4rem;position:relative;font-size:.82rem;color:var(--sub);border-bottom:1px dashed var(--border);line-height:1.5;}
 .fluxo li:last-child{border:none}
 .fluxo li::before{content:counter(f);position:absolute;left:.3rem;top:.4rem;width:1.4rem;height:1.4rem;background:var(--g2);color:#fff;border-radius:50%;font-size:.68rem;font-weight:600;display:flex;align-items:center;justify-content:center;}
-/* DADOS */
 .kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
 .kbox{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;transition:box-shadow .2s;}
 .kbox:hover{box-shadow:var(--shadow)}
@@ -271,7 +249,6 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 .radial-label{font-size:.71rem;color:var(--sub);margin-top:.35rem}
 .radial-val{font-family:'Playfair Display',serif;font-size:1rem;color:var(--g2);margin-top:.1rem;font-weight:700}
 [data-theme="dark"] .radial-val{color:var(--a)}
-/* INSIGHTS */
 .insights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:1.2rem}
 .insight-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1rem;position:relative;overflow:hidden;}
 .insight-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
@@ -281,10 +258,8 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 .insight-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--sub);margin-bottom:.3rem;font-weight:600}
 .insight-val{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--text);font-weight:700;line-height:1}
 .insight-sub{font-size:.73rem;color:var(--sub);margin-top:.3rem;line-height:1.5}
-/* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:.65rem 1.4rem;border-radius:100px;font-size:.8rem;opacity:0;pointer-events:none;z-index:700;transition:all .3s;box-shadow:var(--shadow-lg);white-space:nowrap;font-weight:700;letter-spacing:.01em;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* WELCOME */
 #welcome-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.2rem;background:rgba(4,12,7,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:1;pointer-events:all;transition:opacity .35s ease,backdrop-filter .35s ease,background-color .35s ease;}
 #welcome-overlay.closed{opacity:0;pointer-events:none}
 #welcome-overlay.leaving{pointer-events:none;animation:welcomeOverlayOut .75s cubic-bezier(.16,1,.3,1) forwards;}
@@ -323,8 +298,6 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
   .grid{grid-template-columns:1fr}
   header{padding:3.5rem 1.2rem 3rem}
 }
-
-/* Additional mobile tuning */
 @media (max-width:480px){
   body{font-size:15px}
   header{padding:2.2rem 1rem 2rem}
@@ -424,7 +397,7 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
   <div class="stats-row">
     <div class="stat"><b data-target="5">0</b><span>Cidades</span></div>
     <div class="stat"><b data-target="110">0</b><span>Respostas</span></div>
-    <div class="stat"><b data-target="4">0</b><span>CAPS</span></div>
+    <div class="stat"><b data-target="5">0</b><span>CAPS</span></div>
     <div class="stat"><b data-target="1">0</b><span>UPA 24h</span></div>
     <div class="stat"><b data-target="3">0</b><span>Hospitais</span></div>
     <div class="stat"><b data-target="15">0</b><span>CRAS/CREAS</span></div>
@@ -479,16 +452,16 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
     <div class="search-wrap">
       <svg class="search-icon-el" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" class="search-input" id="search-input" placeholder="Buscar por cidade, tipo de serviço, especialidade…" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
-      <button class="search-clear" id="search-clear-btn" onclick="clearSearch()">X</button>
+      <button class="search-clear" id="search-clear-btn" onclick="clearSearch()">✕</button>
     </div>
     <div class="chips-row">
-      <span class="chip" data-q="urgência" onclick="chipSearch(this)">Urgência</span>
-      <span class="chip" data-q="psiquiátric" onclick="chipSearch(this)">Psiquiatria</span>
-      <span class="chip" data-q="álcool" onclick="chipSearch(this)">Álcool/Drogas</span>
+      <span class="chip" data-q="urgencia" onclick="chipSearch(this)">Urgência</span>
+      <span class="chip" data-q="psiquiatric" onclick="chipSearch(this)">Psiquiatria</span>
+      <span class="chip" data-q="alcool" onclick="chipSearch(this)">Álcool/Drogas</span>
       <span class="chip" data-q="mulher" onclick="chipSearch(this)">Mulher</span>
-      <span class="chip" data-q="criança" onclick="chipSearch(this)">Criança/Adolesc.</span>
+      <span class="chip" data-q="crianca" onclick="chipSearch(this)">Criança/Adolesc.</span>
       <span class="chip" data-q="24 horas" onclick="chipSearch(this)">24h</span>
-      <span class="chip" data-q="tianguá" onclick="chipSearch(this)">Tianguá</span>
+      <span class="chip" data-q="tiangua" onclick="chipSearch(this)">Tianguá</span>
       <span class="chip" data-q="ubajara" onclick="chipSearch(this)">Ubajara</span>
       <span class="chip" data-q="ibiapina" onclick="chipSearch(this)">Ibiapina</span>
       <span class="chip" data-q="cras" onclick="chipSearch(this)">CRAS/CREAS</span>
@@ -511,7 +484,7 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 
   <div id="no-results" style="display:none">
     <div class="no-results">
-      <span class="icon"></span>
+      <span class="icon">🔍</span>
       <h4>Nenhum resultado</h4>
       <p>Tente buscar por cidade, tipo de serviço ou especialidade. Ou use o assistente acima.</p>
     </div>
@@ -533,7 +506,7 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
       <li>CREAS</li><li>CRAM — Atenção à Mulher</li>
     </ul></div>
     <div class="mc"><h4>Viçosa do Ceará</h4><ul><li>Hospital Municipal</li><li>CAPS</li><li>CRAS Sede + CRAS Juá dos Vieiras</li><li>3 UBS mapeadas</li></ul></div>
-    <div class="mc"><h4>São Benedito</h4><ul><li>17+ UBS</li><li>CRAS Antônio Furtado + Damião Jorge</li><li>CREAS</li><li>Centro de Convivência Luís Francisco</li><li>Acolhimento São Francisco</li></ul></div>
+    <div class="mc"><h4>São Benedito</h4><ul><li>CAPS Nossa Senhora de Fátima</li><li>17+ UBS</li><li>CRAS Antônio Furtado + Damião Jorge</li><li>CREAS</li><li>Centro de Convivência Luís Francisco</li><li>Acolhimento São Francisco</li></ul></div>
     <div class="mc"><h4>Ibiapina</h4><ul><li>CAPS</li><li>Hospital M. Wanderlene</li><li>CRAS Pedrinhas + Alto Lindo + Estádio</li><li>12 UBS mapeadas</li><li>CAMI (Atendimento à Mulher)</li><li>AA — Grupo Central</li></ul></div>
     <div class="mc"><h4>Ubajara</h4><ul><li>Hospital Francisca Belarmino</li><li>18 UBS / PSFs</li><li>CRAS Crisântema + CRAS III + CRAS Maria Moreira</li><li>CREAS</li></ul></div>
   </div>
@@ -550,6 +523,7 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
     <div class="pcard"><h4>CAPS II — Tianguá</h4><p>Referência regional. Atende adultos com transtornos mentais graves. Psicoterapia individual e em grupo, psiquiatria, oficinas terapêuticas, PTS, visita domiciliar. Contato via Instagram @capsadtiangua.</p></div>
     <div class="pcard"><h4>CAPS AD — Tianguá</h4><p>Especializado em álcool e outras drogas. Acolhimento, redução de danos, grupos de apoio, atendimento familiar, enfermagem, educação física. Tel.: (88) 99311-1511 / 99311-2902.</p></div>
     <div class="pcard"><h4>CAPS i — Tianguá</h4><p>Atendimento infantojuvenil para crianças e adolescentes com sofrimento psíquico intenso, transtornos mentais graves, transtornos do neurodesenvolvimento, autolesão, comportamento suicida, crises de saúde mental e uso problemático de álcool e outras drogas. Tel.: (88) 3671-2888 · saude@tiangua.ce.gov.br.</p></div>
+    <div class="pcard"><h4>CAPS Nossa Senhora de Fátima — São Benedito</h4><p>Rua Valfrido Salmito, nº 270, bairro Centro. CEP: 62370-000. CNPJ: 07.778.129/0001-74. E-mail: capsisaobenedito@outlook.com. Atende adultos com sofrimento psíquico grave e transtornos mentais.</p></div>
     <div class="pcard"><h4>CAPS — Viçosa do Ceará</h4><p>Rua Fontenele Sobrinho, 1524, Centro. Tel.: (88) 3632-1278. Atende adultos com sofrimento psíquico grave.</p></div>
     <div class="pcard"><h4>CAPS — Ibiapina</h4><p>Rua Luis B. de Lima, 300. Acolhimento, atendimento individual multiprofissional, grupos terapêuticos, oficinas e visita domiciliar.</p></div>
   </div>
@@ -585,14 +559,14 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
   <div class="ssub">Panorama do mapeamento — 110 formulários respondidos por estudantes de Psicologia</div>
   <div class="insights-grid" style="margin-bottom:1.5rem">
     <div class="insight-card good"><div class="insight-label">Cobertura UBS</div><div class="insight-val">100%</div><div class="insight-sub">Todos os 5 municípios possuem atenção básica</div></div>
-    <div class="insight-card good"><div class="insight-label">CAPS disponíveis</div><div class="insight-val">5</div><div class="insight-sub">Tianguá (3), Ibiapina e Viçosa do Ceará</div></div>
-    <div class="insight-card warn"><div class="insight-label">Lacuna crítica</div><div class="insight-val">São Benedito</div><div class="insight-sub">Sem CAPS ou hospital próprio mapeado</div></div>
-    <div class="insight-card info"><div class="insight-label">Polo regional</div><div class="insight-val">Tianguá</div><div class="insight-sub">UPA 24h + CAPS II + CAPS AD + CAPS i + CRAM + 3 CRAS</div></div>
+    <div class="insight-card good"><div class="insight-label">CAPS disponíveis</div><div class="insight-val">6</div><div class="insight-sub">Tianguá (3), São Benedito, Ibiapina e Viçosa do Ceará</div></div>
+    <div class="insight-card warn"><div class="insight-label">Polo regional</div><div class="insight-val">Tianguá</div><div class="insight-sub">UPA 24h + CAPS II + CAPS AD + CAPS i + CRAM + 3 CRAS</div></div>
+    <div class="insight-card info"><div class="insight-label">Saúde mental</div><div class="insight-val">São Benedito</div><div class="insight-sub">CAPS Nossa Sra. de Fátima — Rua Valfrido Salmito, 270</div></div>
   </div>
   <div class="kpi">
     <div class="kbox"><b>110</b><span>respostas</span></div>
     <div class="kbox"><b>5</b><span>cidades</span></div>
-    <div class="kbox"><b>5</b><span>CAPS ativos</span></div>
+    <div class="kbox"><b>6</b><span>CAPS ativos</span></div>
     <div class="kbox"><b>1</b><span>UPA 24h</span></div>
     <div class="kbox"><b>3</b><span>hospitais</span></div>
     <div class="kbox"><b>55+</b><span>UBS / PSFs</span></div>
@@ -625,7 +599,7 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
         <div class="legend-item"><div class="legend-dot" style="background:#1a5c3a"></div>UBS / PSF — 55+ (66%)</div>
         <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>CRAS / CREAS — 15+ (18%)</div>
         <div class="legend-item"><div class="legend-dot" style="background:#0ea5e9"></div>Outros (CRAM/CAMI) — 5+ (6%)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>CAPS — 4 (5%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>CAPS — 6 (5%)</div>
         <div class="legend-item"><div class="legend-dot" style="background:#ca8a04"></div>Hospitais — 3 (4%)</div>
         <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div>UPA — 1 (1%)</div>
       </div>
@@ -634,7 +608,7 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
   <div class="chart-wrap">
     <h4>Cobertura por município</h4>
     <div class="radial-grid">
-      <div class="radial-item"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#16a34a" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="50" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">3/5</text></svg><div class="radial-label">Com CAPS</div><div class="radial-val">60%</div></div>
+      <div class="radial-item"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#16a34a" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="40" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">4/5</text></svg><div class="radial-label">Com CAPS</div><div class="radial-val">80%</div></div>
       <div class="radial-item"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#ca8a04" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="40" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">4/5</text></svg><div class="radial-label">Com Hospital</div><div class="radial-val">80%</div></div>
       <div class="radial-item"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#1a5c3a" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="1" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">5/5</text></svg><div class="radial-label">Com UBS</div><div class="radial-val">100%</div></div>
       <div class="radial-item"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--bar-track)" stroke-width="8"/><circle cx="40" cy="40" r="32" fill="none" stroke="#dc2626" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="160" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" font-size="13" font-family="Playfair Display,serif" fill="var(--g2)">1/5</text></svg><div class="radial-label">Com UPA</div><div class="radial-val">20%</div></div>
@@ -647,32 +621,53 @@ main{max-width:980px;margin:0 auto;padding:2rem 1rem 6rem;position:relative;z-in
 
 <script>
 const CARDS=[
-  {type:'upa',search:'upa urgência emergência tianguá 24h samu triagem crise psiquiátrica 24 horas',badge:'UPA 24h',badgeCls:'bupa',title:'UPA 24h',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'24 horas / 7 dias',phone:'(88) 3671-2100',tags:['Todas as idades','Urgência','Emergência'],acesso:'Demanda espontânea / SAMU 192',obs:'Referência de urgência para toda a microrregião',modal:{badge:'UPA 24h',badgeBg:'#fee2e2',badgeColor:'#7f1d1d',title:'UPA 24h de Tianguá',city:'Tianguá — CE',lat:-3.7362,lng:-40.9908,phone:'(88) 3671-2100',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / SAMU 192',obs:'Referência de urgência e emergência para toda a microrregião da Serra da Ibiapaba',services:['Urgência e emergência geral','Estabilização de pacientes graves','Triagem e classificação de risco','Regulação para internação (CROSS)','Suporte para crise psiquiátrica aguda'],specs:['Atende todas as faixas etárias','SAMU 192 como porta de entrada em crise','Funciona como referência noturna e fim de semana','Leitos de observação e estabilização'],aiContext:'urgência emergência crise 24h tianguá'}},
-  {type:'caps',search:'caps psicossocial psicoterapia psiquiatria tianguá grupos terapêuticos saúde mental adultos oficinas visita domiciliar',badge:'CAPS II',badgeCls:'baps',title:'CAPS II — Centro de Atenção Psicossocial',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h–17h',tags:['Adultos','Saúde mental'],acesso:'Demanda espontânea ou encaminhamento por UBS',modal:{badge:'CAPS II',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS II — Centro de Atenção Psicossocial',city:'Tianguá — CE',lat:-3.7350,lng:-40.9905,horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento por UBS',services:['Consulta psiquiátrica','Psicoterapia individual e grupal','Grupos terapêuticos','Visita domiciliar','Oficinas terapêuticas','Projeto Terapêutico Singular (PTS)'],specs:['Referência regional — cobre municípios vizinhos sem CAPS','Atende adultos com transtornos mentais graves','Contato via Instagram @capsadtiangua'],aiContext:'saúde mental psiquiatria terapia adultos tianguá referência regional'}},
-  {type:'caps',search:'caps ad álcool drogas dependência química tianguá redução de danos acolhimento',badge:'CAPS AD',badgeCls:'baps',title:'CAPS AD — Álcool e Drogas',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h–17h',phone:'(88) 99311-1511',tags:['Adultos','Álcool e Drogas','Redução de danos'],acesso:'Demanda espontânea ou encaminhamento',modal:{badge:'CAPS AD',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS AD — Álcool e Drogas',city:'Tianguá — CE',lat:-3.7355,lng:-40.9912,phone:'(88) 99311-1511',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento',services:['Acolhimento e escuta qualificada','Redução de danos','Grupos de apoio','Atendimento familiar','Enfermagem','Educação física'],specs:['Especializado em álcool e outras drogas','Tel. alternativo: (88) 99311-2902'],aiContext:'álcool drogas dependência química redução danos tianguá'}},
-  {type:'caps',search:'caps i caps infantojuvenil caps infantil tianguá crianças adolescentes sofrimento psíquico transtornos mentais saúde mental',badge:'CAPS i',badgeCls:'baps',title:'CAPS i — Centro de Atenção Psicossocial Infantojuvenil',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h30–11h30 e 13h30–17h30',phone:'(88) 3671-2888',tags:['Infantojuvenil','Saúde mental','Crianças e adolescentes'],acesso:'Demanda espontânea ou encaminhamento por UBS',modal:{badge:'CAPS i',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS i — Centro de Atenção Psicossocial Infantojuvenil',city:'Tianguá — CE',lat:-3.7352,lng:-40.9907,address:'Rua José Francisco de Vasconcelos Júnior, nº 26, Bairro Lions Club',phone:'(88) 3671-2888',email:'saude@tiangua.ce.gov.br',horario:'Seg–Sex, 07h30–11h30 / 13h30–17h30',acesso:'Demanda espontânea ou encaminhamento por UBS',services:['Acolhimento inicial','Escuta qualificada','Avaliação multiprofissional','Atendimento psicológico','Atendimento psiquiátrico infantil','Atendimento de enfermagem','Atendimento de serviço social','Grupos terapêuticos','Oficinas terapêuticas','Orientação e acompanhamento familiar','Visitas domiciliares','Projeto Terapêutico Singular (PTS)','Articulação com escolas, Conselho Tutelar, CRAS, CREAS e demais serviços da rede'],specs:['Atende crianças e adolescentes com sofrimento psíquico intenso','Transtornos mentais graves e persistentes','Transtornos do neurodesenvolvimento com sofrimento psíquico significativo','Autolesão e comportamento suicida','Uso problemático de álcool e outras drogas na infância e adolescência'],aiContext:'caps infantojuvenil crianças adolescentes saúde mental tianguá'}},
-  {type:'ubs',search:'ubs atenção básica tianguá família agendamento csu maria costa',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · 20+ unidades',horario:'Seg–Sex, 07h–17h',tags:['Todas as idades','Famílias'],acesso:'Demanda espontânea / Agendamento',obs:'Nem todas possuem insumos para tabagismo',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — Tianguá',city:'Tianguá — CE · 20+ unidades',lat:-3.7370,lng:-40.9910,horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea / Agendamento',obs:'Nem todas possuem insumos para tratamento de tabagismo',services:['CSU Maria Costa','Centro de Saúde I e III','UBS Dionila','UBS Valdo Dourado','UBS Tabainha','UBS Frecheiras','UBS Itaperacema','UBS Araticum e outras'],specs:['Atenção básica à saúde para todas as faixas etárias','31 respostas coletadas no mapeamento'],aiContext:'atenção básica família consulta agendamento tianguá'}},
-  {type:'hospital',search:'hospital tianguá maternidade madalena nunes psiquiátrico internação cirurgia 24h',badge:'Hospital',badgeCls:'bhos',title:'Hospital e Maternidade Madalena Nunes',city:'Tianguá',cityDetail:'Tianguá — CE · Adm. São Camilo',horario:'24 horas / 7 dias',phone:'(88) 3671-2100',tags:['Todas as idades','Urgência','Leitos psiquiátricos'],acesso:'Demanda espontânea / Regulação CROSS',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital e Maternidade Madalena Nunes',city:'Tianguá — CE',lat:-3.7341,lng:-40.9899,phone:'(88) 3671-2100',address:'Rua Assembleia de Deus, Centro, Tianguá',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',obs:'Hospital de referência regional com leitos psiquiátricos',services:['Anestesiologia','Cirurgia Geral','Clínica Médica','Ginecologia e Obstetrícia','Neonatologia','Ortopedia','Pediatria','Radiologia','Internação psiquiátrica'],specs:['Leitos psiquiátricos disponíveis','Referência para internação via CROSS','Maternidade de referência regional'],aiContext:'internação psiquiátrica hospital maternidade cirurgia tianguá'}},
-  {type:'hospital',search:'hospital viçosa ceará urgência internação samu',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal de Viçosa do Ceará',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'24 horas / 7 dias',phone:'(88) 3632-1242',tags:['Todas as idades','Urgência'],acesso:'Demanda espontânea / Encaminhamento UBS / SAMU',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal de Viçosa do Ceará',city:'Viçosa do Ceará — CE',lat:-3.5611,lng:-41.0913,phone:'(88) 3632-1242',address:'Av. José Figueira, SN, Centro, Viçosa do Ceará',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Encaminhamento UBS / SAMU',services:['Atendimento médio e alta complexidade','Urgência e emergência','Internações clínicas e cirúrgicas','Observação e estabilização'],specs:['Referência municipal para urgência','Atende toda a população de Viçosa do Ceará'],aiContext:'urgência hospital internação viçosa ceará'}},
-  {type:'caps',search:'caps psicossocial viçosa ceará saúde mental psicologia psiquiatria grupos',badge:'CAPS',badgeCls:'baps',title:'Centro de Atenção Psicossocial',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'Seg–Sex, 07h–17h',phone:'(88) 3632-1278',tags:['Adultos','Saúde mental'],acesso:'Demanda espontânea ou encaminhamento',modal:{badge:'CAPS',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'Centro de Atenção Psicossocial',city:'Viçosa do Ceará — CE',lat:-3.5617,lng:-41.0925,phone:'(88) 3632-1278',address:'Rua Fontenele Sobrinho, 1524, Centro',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento',services:['Atendimento psicológico','Consulta psiquiátrica','Grupos terapêuticos','Visita domiciliar'],specs:['Atende adultos com sofrimento psíquico','7 respostas coletadas no mapeamento'],aiContext:'saúde mental psicologia psiquiatria viçosa ceará'}},
-  {type:'cras',search:'cras suas paif scfv cadunico bpc famílias viçosa vulnerabilidade assistência social',badge:'CRAS',badgeCls:'bcra',title:'CRAS Sede — Viçosa do Ceará',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'Seg–Sex 07h–17h',phone:'(88) 3632-1119',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Sede — Viçosa do Ceará',city:'Viçosa do Ceará — CE',lat:-3.5620,lng:-41.0918,phone:'(88) 3632-1119',email:'crassedevicosace@hotmail.com',horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea · Porta do SUAS',services:['PAIF','SCFV','CadÚnico','BPC','Encaminhamentos para a rede'],specs:['Proteção Social Básica','Atende famílias em situação de vulnerabilidade'],aiContext:'assistência social famílias cadunico bpc vulnerabilidade viçosa'}},
-  {type:'ubs',search:'ubs são benedito família abc miguel pedro agendamento',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — São Benedito',city:'São Benedito',cityDetail:'São Benedito — CE · 17+ unidades',horario:'Seg–Sex 07h30–17h',tags:['Todas as idades','Famílias'],acesso:'Demanda espontânea / Agendamento',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — São Benedito',city:'São Benedito — CE · 17+ unidades',lat:-4.0459,lng:-40.8652,horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea / Agendamento',services:['UBS ABC','Miguel Pedro','Benedito Arthur','João Barros','Jussara','Inhuçu','Pedra de Coco','Lagoa','Inharé e outras'],specs:['Atenção básica · 25 respostas coletadas'],aiContext:'atenção básica família consulta são benedito'}},
-  {type:'cras',search:'cras creas são benedito assistência social paif paefi vulnerabilidade risco violência',badge:'CRAS / CREAS',badgeCls:'bcra',title:'CRAS Antônio Furtado + CRAS Damião Jorge + CREAS',city:'São Benedito',cityDetail:'São Benedito — CE',horario:'Seg–Sex 07h30–17h',tags:['Famílias','Vulnerabilidade'],acesso:'Demanda espontânea / Encaminhamento',modal:{badge:'CRAS / CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Antônio Furtado + Damião Jorge + CREAS',city:'São Benedito — CE',lat:-4.0463,lng:-40.8658,horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea / Encaminhamento',services:['PAIF','SCFV','PAEFI','CadÚnico','BPC','Equipe Volante','Acolhimento institucional'],specs:['CRAS = Proteção Básica · CREAS = Proteção Especial'],aiContext:'assistência social vulnerabilidade risco violência são benedito'}},
-  {type:'cen',search:'centro convivência são benedito cultura arte música teatro inclusão social',badge:'Centro de Convivência',badgeCls:'bcen',title:'Centro de Convivência Luís Francisco de Paiva',city:'São Benedito',cityDetail:'São Benedito — CE',tags:['Todas as idades','Inclusão social'],acesso:'Demanda espontânea',obs:'Foco em convivência e cultura — sem atendimento clínico',modal:{badge:'Centro de Convivência',badgeBg:'#e0f2fe',badgeColor:'#0c4a6e',title:'Centro de Convivência Luís Francisco de Paiva',city:'São Benedito — CE',lat:-4.0455,lng:-40.8645,address:'Dep. Vicente Ribeiro, Centro',horario:'Seg–Sex (horário comercial)',acesso:'Demanda espontânea',obs:'Foco em convivência e cultura — não realiza atendimento clínico',services:['Música e artes','Teatro','Literatura','Artesanato','Geração de renda'],specs:['Equipamento de inclusão social — voltado a todas as idades'],aiContext:'cultura arte inclusão social são benedito convivência'}},
-  {type:'caps',search:'caps ibiapina psicossocial dependência química grupos oficinas visita domiciliar',badge:'CAPS',badgeCls:'baps',title:'Centro de Atenção Psicossocial',city:'Ibiapina',cityDetail:'Ibiapina — CE',horario:'Seg–Sex, 07h–17h',tags:['Adultos','Saúde mental','Dependência química'],acesso:'Demanda espontânea ou referência por UBS/CRAS',modal:{badge:'CAPS',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'Centro de Atenção Psicossocial',city:'Ibiapina — CE',lat:-3.9221,lng:-40.8919,address:'Rua Luis B. de Lima, 300 — José Avelino Portela',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou referência por UBS/CRAS',services:['Acolhimento e escuta','Atendimento individual multiprofissional','Grupos terapêuticos','Oficinas','Visita domiciliar','Atendimento para dependência química'],specs:['Atende adultos com transtornos mentais e dependência química','22 respostas coletadas'],aiContext:'saúde mental dependência química ibiapina adultos terapia'}},
-  {type:'hospital',search:'hospital ibiapina wanderlene internação cirurgia 24h regulação',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal Maria Wanderlene Negreiros',city:'Ibiapina',cityDetail:'Ibiapina — CE',horario:'24 horas / 7 dias',tags:['Todas as idades','Internação'],acesso:'Demanda espontânea / Regulação CROSS',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal Maria Wanderlene Negreiros',city:'Ibiapina — CE',lat:-3.9215,lng:-40.8912,address:'Rua Dep. Fernando Melo, Centro, Ibiapina',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',services:['Cirurgia geral','Internação clínica','Serviços gerais','Estabilização e encaminhamento'],specs:['Referência hospitalar para Ibiapina e região sul da Serra'],aiContext:'internação hospital cirurgia ibiapina'}},
-  {type:'cras',search:'cras ibiapina pedrinhas alto lindo estádio paif scfv cadunico famílias',badge:'CRAS',badgeCls:'bcra',title:'CRAS Pedrinhas + CRAS Alto Lindo + CRAS Estádio',city:'Ibiapina',cityDetail:'Ibiapina — CE',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Pedrinhas + Alto Lindo + Estádio',city:'Ibiapina — CE',lat:-3.9230,lng:-40.8930,horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea · Porta do SUAS',services:['PAIF','SCFV','CadÚnico e BPC','Encaminhamentos para rede'],specs:['3 unidades CRAS cobrindo diferentes territórios de Ibiapina'],aiContext:'assistência social famílias ibiapina cras cadunico'}},
-  {type:'cen',search:'cami mulher violência doméstica ibiapina disque 100 psicologia advocacia nutrição',badge:'Atenção à Mulher',badgeCls:'baas',title:'CAMI — Casa de Atendimento à Mulher Ibiapinense',city:'Ibiapina',cityDetail:'Ibiapina — CE',tags:['Mulheres','Violência doméstica'],acesso:'Demanda espontânea / Disque 100',modal:{badge:'Atenção à Mulher',badgeBg:'#fce7f3',badgeColor:'#831843',title:'CAMI — Casa de Atendimento à Mulher Ibiapinense',city:'Ibiapina — CE',lat:-3.9218,lng:-40.8922,address:'Rua Sargento João Gomes Neto, Centro',horario:'Seg–Sex (horário comercial)',acesso:'Demanda espontânea / Denúncias: Disque 100',services:['Atendimento psicológico','Assistência social','Advocacia','Nutrição','Cursos de autonomia econômica','Grupo reflexivo para homens agressores'],specs:['Voltado exclusivamente para mulheres','Denúncias: Disque 100 (gratuito e sigiloso)'],aiContext:'violência mulher apoio psicológico jurídico ibiapina'}},
-  {type:'hospital',search:'hospital ubajara francisca belarmino cirurgia campanhas prevenção internação',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal Francisca Belarmino da Costa',city:'Ubajara',cityDetail:'Ubajara — CE',horario:'24 horas / 7 dias',tags:['Todas as idades','Cirurgia'],acesso:'Demanda espontânea / Regulação',obs:'Forte atuação em campanhas mensais de prevenção',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal Francisca Belarmino da Costa',city:'Ubajara — CE',lat:-3.8503,lng:-40.9073,email:'hospitalmunicipalubj2020@gmail.com',address:'Rua Antônio Barros, 173, Ubajara',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',obs:'Forte atuação em campanhas mensais de prevenção à saúde',services:['Cirurgias','Internação clínica','Urgência e estabilização','Campanhas preventivas mensais'],specs:['Referência hospitalar para Ubajara e região','25 respostas coletadas'],aiContext:'internação hospital cirurgia prevenção ubajara'}},
-  {type:'ubs',search:'ubs psf ubajara família pitanga chapada cajueiro',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — Ubajara',city:'Ubajara',cityDetail:'Ubajara — CE · 18 unidades PSF',horario:'Seg–Sex 07h–17h',phone:'(88) 3634-2364',tags:['Todas as idades','Comunidade'],acesso:'Demanda espontânea / Agendamento',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — Ubajara',city:'Ubajara — CE · 18 unidades PSF',lat:-3.8498,lng:-40.9065,phone:'(88) 3634-2364',horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea / Agendamento',services:['PSF Pitanga','Maria Graciema','Chapada','Araticum','Cajueiro','Itaperacema','Potós','Moitinga','Centro de Saúde e outros'],specs:['18 unidades PSF mapeadas'],aiContext:'atenção básica família consulta ubajara'}},
-  {type:'cras',search:'cras creas ubajara crisântema maria moreira paefi proteção especial famílias',badge:'CRAS / CREAS',badgeCls:'bcra',title:'CRAS Crisântema + CRAS III + CRAS Maria Moreira + CREAS',city:'Ubajara',cityDetail:'Ubajara — CE',horario:'Seg–Sex 07h30–17h',phone:'(88) 3634-2322',tags:['Famílias','Vulnerabilidade'],acesso:'Demanda espontânea · Porta do SUAS',obs:'Alta demanda de atendimento registrada',modal:{badge:'CRAS / CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Crisântema + CRAS III + CRAS Maria Moreira + CREAS',city:'Ubajara — CE',lat:-3.8510,lng:-40.9080,phone:'(88) 3634-2322',horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea · Porta do SUAS',obs:'Alta demanda de atendimento registrada',services:['PAIF','SCFV','PAEFI','CadÚnico','BPC','Acolhimento institucional','Proteção Especial'],specs:['4 equipamentos socioassistenciais em Ubajara'],aiContext:'assistência social vulnerabilidade risco paefi ubajara cras'}},
-  /* --- NOVOS: CRAS / CREAS / CRAM Tianguá --- */
-  {type:'cras',search:'cras tiangua centro famílias cadunico paif scfv assistência social',badge:'CRAS',badgeCls:'bcra',title:'CRAS Centro — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Centro',horario:'Segunda a sexta',phone:'(88) 8821-6922',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Centro — Tianguá',city:'Tianguá — CE',lat:-3.7360,lng:-40.9900,phone:'(88) 8821-6922',email:'crascentrotiangua@gmail.com',address:'Rua Poe. Lauro Menezes, 99, Centro, Tianguá',horario:'Segunda a sexta',acesso:'Demanda espontânea · Porta do SUAS',services:['Cadastro Único (CadÚnico)','Orientação sobre Bolsa Família e benefícios sociais','PAIF — Proteção e Atendimento Integral à Família','SCFV — Serviço de Convivência e Fortalecimento de Vínculos','Encaminhamentos para saúde, educação e outros serviços','Atendimento a idosos, gestantes, crianças e famílias vulneráveis'],specs:['Referência de Proteção Social Básica para o território central de Tianguá'],aiContext:'assistência social cadunico bolsa família famílias tianguá cras centro'}},
-  {type:'cras',search:'cras santo antonio tiangua bairro famílias paif assistência social',badge:'CRAS',badgeCls:'bcra',title:'CRAS Santo Antônio — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Bairro Santo Antônio',horario:'Segunda a sexta',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Santo Antônio — Tianguá',city:'Tianguá — CE',lat:-3.7385,lng:-40.9940,horario:'Segunda a sexta',acesso:'Demanda espontânea · Porta do SUAS',services:['Cadastro Único (CadÚnico)','PAIF — Proteção e Atendimento Integral à Família','SCFV — Serviço de Convivência e Fortalecimento de Vínculos','Encaminhamentos para a rede socioassistencial','Atendimento a idosos, gestantes, crianças e famílias vulneráveis'],specs:['Referência para a população do bairro Santo Antônio e região de Tianguá'],aiContext:'assistência social famílias tianguá cras santo antonio'}},
-  {type:'cras',search:'cras bela vista tiangua zona rural famílias paif cadunico',badge:'CRAS',badgeCls:'bcra',title:'CRAS Bela Vista — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Distrito Bela Vista (Zona Rural)',horario:'Segunda a sexta',phone:'(88) 3671-1129',tags:['Famílias','Zona Rural'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Bela Vista — Tianguá',city:'Tianguá — CE',lat:-3.7550,lng:-41.0100,phone:'(88) 3671-1129',email:'cras.bvista@gmail.com',address:'Distrito Bela Vista, Zona Rural, Tianguá',horario:'Segunda a sexta',acesso:'Demanda espontânea · Porta do SUAS',services:['Cadastro Único (CadÚnico)','Orientação sobre Bolsa Família e benefícios sociais','PAIF — Proteção e Atendimento Integral à Família','SCFV — Serviço de Convivência e Fortalecimento de Vínculos','Atendimento a famílias da zona rural em situação de vulnerabilidade'],specs:['Referência para o Distrito Bela Vista e zona rural de Tianguá'],aiContext:'assistência social rural cadunico paif tianguá bela vista'}},
-  {type:'cras',search:'creas tiangua proteção especial violência negligência trabalho infantil rua medida socioeducativa direitos violados paefi',badge:'CREAS',badgeCls:'bcra',title:'CREAS — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Centro',horario:'Segunda a sexta',tags:['Proteção Especial','Violência','Direitos violados'],acesso:'Demanda espontânea / Encaminhamento rede',modal:{badge:'CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CREAS — Tianguá',city:'Tianguá — CE',lat:-3.7348,lng:-40.9895,email:'creastiangua@hotmail.com',address:'Rua Teófilo Ramos, 299, Centro, Tianguá',horario:'Segunda a sexta',acesso:'Demanda espontânea ou encaminhamento pela rede de proteção',services:['Atendimento a situações de violência física, psicológica ou sexual','Negligência e abandono','Trabalho infantil','Situação de rua','Violência contra idosos','Medidas socioeducativas','PAEFI — Proteção e Atendimento Especializado a Famílias e Indivíduos'],specs:['Proteção Social Especial — referência para direitos violados e situações de risco','CREAS municipal de Tianguá'],aiContext:'violência negligência direitos violados proteção especial tianguá creas paefi'}},
-  {type:'cen',search:'cram mulher violência doméstica tianguá psicologia social jurídico delegacia rede proteção acolhimento',badge:'Atenção à Mulher',badgeCls:'baas',title:'CRAM — Centro de Referência de Atendimento à Mulher',city:'Tianguá',cityDetail:'Tianguá — CE',phone:'(88) 3671-1084',tags:['Mulheres','Violência doméstica'],acesso:'Demanda espontânea / Encaminhamento',modal:{badge:'Atenção à Mulher',badgeBg:'#fce7f3',badgeColor:'#831843',title:'CRAM — Centro de Referência de Atendimento à Mulher',city:'Tianguá — CE',lat:-3.7352,lng:-40.9905,phone:'(88) 3671-1084',email:'cram.tiangua@gmail.com',horario:'Segunda a sexta (horário comercial)',acesso:'Demanda espontânea ou encaminhamento pela rede de proteção',services:['Acolhimento e escuta qualificada','Atendimento psicológico','Atendimento social','Orientação jurídica','Encaminhamento para rede de proteção','Articulação com Delegacia, CREAS, CAPS e Justiça'],specs:['Especializado no atendimento a mulheres em situação de violência','Articulação em rede com sistema de segurança e judiciário de Tianguá'],aiContext:'violência mulher doméstica psicologia jurídico social tianguá cram'}}
+  {type:'upa',search:'upa urgencia emergencia tiangua 24h samu triagem crise psiquiatrica 24 horas',badge:'UPA 24h',badgeCls:'bupa',title:'UPA 24h',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'24 horas / 7 dias',phone:'(88) 3671-2100',tags:['Todas as idades','Urgência','Emergência'],acesso:'Demanda espontânea / SAMU 192',obs:'Referência de urgência para toda a microrregião',modal:{badge:'UPA 24h',badgeBg:'#fee2e2',badgeColor:'#7f1d1d',title:'UPA 24h de Tianguá',city:'Tianguá — CE',lat:-3.7362,lng:-40.9908,phone:'(88) 3671-2100',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / SAMU 192',obs:'Referência de urgência e emergência para toda a microrregião da Serra da Ibiapaba',services:['Urgência e emergência geral','Estabilização de pacientes graves','Triagem e classificação de risco','Regulação para internação (CROSS)','Suporte para crise psiquiátrica aguda'],specs:['Atende todas as faixas etárias','SAMU 192 como porta de entrada em crise','Funciona como referência noturna e fim de semana','Leitos de observação e estabilização'],aiContext:'urgencia emergencia crise 24h tiangua'}},
+  {type:'caps',search:'caps psicossocial psicoterapia psiquiatria tiangua grupos terapeuticos saude mental adultos oficinas visita domiciliar',badge:'CAPS II',badgeCls:'baps',title:'CAPS II — Centro de Atenção Psicossocial',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h–17h',tags:['Adultos','Saúde mental'],acesso:'Demanda espontânea ou encaminhamento por UBS',modal:{badge:'CAPS II',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS II — Centro de Atenção Psicossocial',city:'Tianguá — CE',lat:-3.7350,lng:-40.9905,horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento por UBS',services:['Consulta psiquiátrica','Psicoterapia individual e grupal','Grupos terapêuticos','Visita domiciliar','Oficinas terapêuticas','Projeto Terapêutico Singular (PTS)'],specs:['Referência regional — cobre municípios vizinhos sem CAPS','Atende adultos com transtornos mentais graves','Contato via Instagram @capsadtiangua'],aiContext:'saude mental psiquiatria terapia adultos tiangua referencia regional'}},
+  {type:'caps',search:'caps ad alcool drogas dependencia quimica tiangua reducao danos acolhimento',badge:'CAPS AD',badgeCls:'baps',title:'CAPS AD — Álcool e Drogas',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h–17h',phone:'(88) 99311-1511',tags:['Adultos','Álcool e Drogas','Redução de danos'],acesso:'Demanda espontânea ou encaminhamento',modal:{badge:'CAPS AD',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS AD — Álcool e Drogas',city:'Tianguá — CE',lat:-3.7355,lng:-40.9912,phone:'(88) 99311-1511',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento',services:['Acolhimento e escuta qualificada','Redução de danos','Grupos de apoio','Atendimento familiar','Enfermagem','Educação física'],specs:['Especializado em álcool e outras drogas','Tel. alternativo: (88) 99311-2902'],aiContext:'alcool drogas dependencia quimica reducao danos tiangua'}},
+  {type:'caps',search:'caps i caps infantojuvenil caps infantil tiangua criancas adolescentes sofrimento psiquico transtornos mentais saude mental',badge:'CAPS i',badgeCls:'baps',title:'CAPS i — Centro de Atenção Psicossocial Infantojuvenil',city:'Tianguá',cityDetail:'Tianguá — CE',horario:'Seg–Sex, 07h30–11h30 e 13h30–17h30',phone:'(88) 3671-2888',tags:['Infantojuvenil','Saúde mental','Crianças e adolescentes'],acesso:'Demanda espontânea ou encaminhamento por UBS',modal:{badge:'CAPS i',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS i — Centro de Atenção Psicossocial Infantojuvenil',city:'Tianguá — CE',lat:-3.7352,lng:-40.9907,address:'Rua José Francisco de Vasconcelos Júnior, nº 26, Bairro Lions Club',phone:'(88) 3671-2888',email:'saude@tiangua.ce.gov.br',horario:'Seg–Sex, 07h30–11h30 / 13h30–17h30',acesso:'Demanda espontânea ou encaminhamento por UBS',services:['Acolhimento inicial','Escuta qualificada','Avaliação multiprofissional','Atendimento psicológico','Atendimento psiquiátrico infantil','Atendimento de enfermagem','Atendimento de serviço social','Grupos terapêuticos','Oficinas terapêuticas','Orientação e acompanhamento familiar','Visitas domiciliares','Projeto Terapêutico Singular (PTS)','Articulação com escolas, Conselho Tutelar, CRAS, CREAS e demais serviços da rede'],specs:['Atende crianças e adolescentes com sofrimento psíquico intenso','Transtornos mentais graves e persistentes','Transtornos do neurodesenvolvimento com sofrimento psíquico significativo','Autolesão e comportamento suicida','Uso problemático de álcool e outras drogas na infância e adolescência'],aiContext:'caps infantojuvenil criancas adolescentes saude mental tiangua'}},
+  {type:'caps',search:'caps nossa senhora fatima sao benedito saude mental psicossocial adultos transtorno mental sofrimento psiquico',badge:'CAPS',badgeCls:'baps',title:'CAPS Nossa Senhora de Fátima',city:'São Benedito',cityDetail:'São Benedito — CE · Bairro Centro',horario:'Seg–Sex, 07h–17h',tags:['Adultos','Saúde mental','Sofrimento psíquico'],acesso:'Demanda espontânea ou encaminhamento por UBS',modal:{badge:'CAPS',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'CAPS Nossa Senhora de Fátima',city:'São Benedito — CE',lat:-4.0468,lng:-40.8653,address:'Rua Valfrido Salmito, nº 270, Bairro Centro',phone:'',email:'capsisaobenedito@outlook.com',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento por UBS',obs:'CEP: 62370-000 · CNPJ: 07.778.129/0001-74',services:['Acolhimento e escuta qualificada','Avaliação e atendimento multiprofissional','Atendimento psicológico individual e em grupo','Consulta psiquiátrica','Oficinas terapêuticas','Grupos terapêuticos','Visita domiciliar','Projeto Terapêutico Singular (PTS)','Articulação com CRAS, CREAS e demais serviços da rede'],specs:['Atende adultos com transtornos mentais graves e sofrimento psíquico intenso','Referência de saúde mental para São Benedito e região','CNPJ: 07.778.129/0001-74'],aiContext:'saude mental psiquiatria terapia adultos sao benedito caps nossa senhora fatima'}},
+  {type:'ubs',search:'ubs atencao basica tiangua familia agendamento csu maria costa',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · 20+ unidades',horario:'Seg–Sex, 07h–17h',tags:['Todas as idades','Famílias'],acesso:'Demanda espontânea / Agendamento',obs:'Nem todas possuem insumos para tabagismo',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — Tianguá',city:'Tianguá — CE · 20+ unidades',lat:-3.7370,lng:-40.9910,horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea / Agendamento',obs:'Nem todas possuem insumos para tratamento de tabagismo',services:['CSU Maria Costa','Centro de Saúde I e III','UBS Dionila','UBS Valdo Dourado','UBS Tabainha','UBS Frecheiras','UBS Itaperacema','UBS Araticum e outras'],specs:['Atenção básica à saúde para todas as faixas etárias','31 respostas coletadas no mapeamento'],aiContext:'atencao basica familia consulta agendamento tiangua'}},
+  {type:'hospital',search:'hospital tiangua maternidade madalena nunes psiquiatrico internacao cirurgia 24h',badge:'Hospital',badgeCls:'bhos',title:'Hospital e Maternidade Madalena Nunes',city:'Tianguá',cityDetail:'Tianguá — CE · Adm. São Camilo',horario:'24 horas / 7 dias',phone:'(88) 3671-2100',tags:['Todas as idades','Urgência','Leitos psiquiátricos'],acesso:'Demanda espontânea / Regulação CROSS',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital e Maternidade Madalena Nunes',city:'Tianguá — CE',lat:-3.7341,lng:-40.9899,phone:'(88) 3671-2100',address:'Rua Assembleia de Deus, Centro, Tianguá',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',obs:'Hospital de referência regional com leitos psiquiátricos',services:['Anestesiologia','Cirurgia Geral','Clínica Médica','Ginecologia e Obstetrícia','Neonatologia','Ortopedia','Pediatria','Radiologia','Internação psiquiátrica'],specs:['Leitos psiquiátricos disponíveis','Referência para internação via CROSS','Maternidade de referência regional'],aiContext:'internacao psiquiatrica hospital maternidade cirurgia tiangua'}},
+  {type:'hospital',search:'hospital vicosa ceara urgencia internacao samu',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal de Viçosa do Ceará',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'24 horas / 7 dias',phone:'(88) 3632-1242',tags:['Todas as idades','Urgência'],acesso:'Demanda espontânea / Encaminhamento UBS / SAMU',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal de Viçosa do Ceará',city:'Viçosa do Ceará — CE',lat:-3.5611,lng:-41.0913,phone:'(88) 3632-1242',address:'Av. José Figueira, SN, Centro, Viçosa do Ceará',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Encaminhamento UBS / SAMU',services:['Atendimento médio e alta complexidade','Urgência e emergência','Internações clínicas e cirúrgicas','Observação e estabilização'],specs:['Referência municipal para urgência','Atende toda a população de Viçosa do Ceará'],aiContext:'urgencia hospital internacao vicosa ceara'}},
+  {type:'caps',search:'caps psicossocial vicosa ceara saude mental psicologia psiquiatria grupos',badge:'CAPS',badgeCls:'baps',title:'Centro de Atenção Psicossocial',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'Seg–Sex, 07h–17h',phone:'(88) 3632-1278',tags:['Adultos','Saúde mental'],acesso:'Demanda espontânea ou encaminhamento',modal:{badge:'CAPS',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'Centro de Atenção Psicossocial',city:'Viçosa do Ceará — CE',lat:-3.5617,lng:-41.0925,phone:'(88) 3632-1278',address:'Rua Fontenele Sobrinho, 1524, Centro',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou encaminhamento',services:['Atendimento psicológico','Consulta psiquiátrica','Grupos terapêuticos','Visita domiciliar'],specs:['Atende adultos com sofrimento psíquico','7 respostas coletadas no mapeamento'],aiContext:'saude mental psicologia psiquiatria vicosa ceara'}},
+  {type:'cras',search:'cras suas paif scfv cadunico bpc familias vicosa vulnerabilidade assistencia social',badge:'CRAS',badgeCls:'bcra',title:'CRAS Sede — Viçosa do Ceará',city:'Viçosa do Ceará',cityDetail:'Viçosa do Ceará — CE',horario:'Seg–Sex 07h–17h',phone:'(88) 3632-1119',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Sede — Viçosa do Ceará',city:'Viçosa do Ceará — CE',lat:-3.5620,lng:-41.0918,phone:'(88) 3632-1119',email:'crassedevicosace@hotmail.com',horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea · Porta do SUAS',services:['PAIF','SCFV','CadÚnico','BPC','Encaminhamentos para a rede'],specs:['Proteção Social Básica','Atende famílias em situação de vulnerabilidade'],aiContext:'assistencia social familias cadunico bpc vulnerabilidade vicosa'}},
+  {type:'ubs',search:'ubs sao benedito familia abc miguel pedro agendamento',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — São Benedito',city:'São Benedito',cityDetail:'São Benedito — CE · 17+ unidades',horario:'Seg–Sex 07h30–17h',tags:['Todas as idades','Famílias'],acesso:'Demanda espontânea / Agendamento',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — São Benedito',city:'São Benedito — CE · 17+ unidades',lat:-4.0459,lng:-40.8652,horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea / Agendamento',services:['UBS ABC','Miguel Pedro','Benedito Arthur','João Barros','Jussara','Inhuçu','Pedra de Coco','Lagoa','Inharé e outras'],specs:['Atenção básica · 25 respostas coletadas'],aiContext:'atencao basica familia consulta sao benedito'}},
+  {type:'cras',search:'cras creas sao benedito assistencia social paif paefi vulnerabilidade risco violencia',badge:'CRAS / CREAS',badgeCls:'bcra',title:'CRAS Antônio Furtado + CRAS Damião Jorge + CREAS',city:'São Benedito',cityDetail:'São Benedito — CE',horario:'Seg–Sex 07h30–17h',tags:['Famílias','Vulnerabilidade'],acesso:'Demanda espontânea / Encaminhamento',modal:{badge:'CRAS / CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Antônio Furtado + Damião Jorge + CREAS',city:'São Benedito — CE',lat:-4.0463,lng:-40.8658,horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea / Encaminhamento',services:['PAIF','SCFV','PAEFI','CadÚnico','BPC','Equipe Volante','Acolhimento institucional'],specs:['CRAS = Proteção Básica · CREAS = Proteção Especial'],aiContext:'assistencia social vulnerabilidade risco violencia sao benedito'}},
+  {type:'cen',search:'centro convivencia sao benedito cultura arte musica teatro inclusao social',badge:'Centro de Convivência',badgeCls:'bcen',title:'Centro de Convivência Luís Francisco de Paiva',city:'São Benedito',cityDetail:'São Benedito — CE',tags:['Todas as idades','Inclusão social'],acesso:'Demanda espontânea',obs:'Foco em convivência e cultura — sem atendimento clínico',modal:{badge:'Centro de Convivência',badgeBg:'#e0f2fe',badgeColor:'#0c4a6e',title:'Centro de Convivência Luís Francisco de Paiva',city:'São Benedito — CE',lat:-4.0455,lng:-40.8645,address:'Dep. Vicente Ribeiro, Centro',horario:'Seg–Sex (horário comercial)',acesso:'Demanda espontânea',obs:'Foco em convivência e cultura — não realiza atendimento clínico',services:['Música e artes','Teatro','Literatura','Artesanato','Geração de renda'],specs:['Equipamento de inclusão social — voltado a todas as idades'],aiContext:'cultura arte inclusao social sao benedito convivencia'}},
+  {type:'caps',search:'caps ibiapina psicossocial dependencia quimica grupos oficinas visita domiciliar',badge:'CAPS',badgeCls:'baps',title:'Centro de Atenção Psicossocial',city:'Ibiapina',cityDetail:'Ibiapina — CE',horario:'Seg–Sex, 07h–17h',tags:['Adultos','Saúde mental','Dependência química'],acesso:'Demanda espontânea ou referência por UBS/CRAS',modal:{badge:'CAPS',badgeBg:'#dcfce7',badgeColor:'#14532d',title:'Centro de Atenção Psicossocial',city:'Ibiapina — CE',lat:-3.9221,lng:-40.8919,address:'Rua Luis B. de Lima, 300 — José Avelino Portela',horario:'Seg–Sex, 07h–17h',acesso:'Demanda espontânea ou referência por UBS/CRAS',services:['Acolhimento e escuta','Atendimento individual multiprofissional','Grupos terapêuticos','Oficinas','Visita domiciliar','Atendimento para dependência química'],specs:['Atende adultos com transtornos mentais e dependência química','22 respostas coletadas'],aiContext:'saude mental dependencia quimica ibiapina adultos terapia'}},
+  {type:'hospital',search:'hospital ibiapina wanderlene internacao cirurgia 24h regulacao',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal Maria Wanderlene Negreiros',city:'Ibiapina',cityDetail:'Ibiapina — CE',horario:'24 horas / 7 dias',tags:['Todas as idades','Internação'],acesso:'Demanda espontânea / Regulação CROSS',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal Maria Wanderlene Negreiros',city:'Ibiapina — CE',lat:-3.9215,lng:-40.8912,address:'Rua Dep. Fernando Melo, Centro, Ibiapina',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',services:['Cirurgia geral','Internação clínica','Serviços gerais','Estabilização e encaminhamento'],specs:['Referência hospitalar para Ibiapina e região sul da Serra'],aiContext:'internacao hospital cirurgia ibiapina'}},
+  {type:'cras',search:'cras ibiapina pedrinhas alto lindo estadio paif scfv cadunico familias',badge:'CRAS',badgeCls:'bcra',title:'CRAS Pedrinhas + CRAS Alto Lindo + CRAS Estádio',city:'Ibiapina',cityDetail:'Ibiapina — CE',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Pedrinhas + Alto Lindo + Estádio',city:'Ibiapina — CE',lat:-3.9230,lng:-40.8930,horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea · Porta do SUAS',services:['PAIF','SCFV','CadÚnico e BPC','Encaminhamentos para rede'],specs:['3 unidades CRAS cobrindo diferentes territórios de Ibiapina'],aiContext:'assistencia social familias ibiapina cras cadunico'}},
+  {type:'cen',search:'cami mulher violencia domestica ibiapina disque 100 psicologia advocacia nutricao',badge:'Atenção à Mulher',badgeCls:'baas',title:'CAMI — Casa de Atendimento à Mulher Ibiapinense',city:'Ibiapina',cityDetail:'Ibiapina — CE',tags:['Mulheres','Violência doméstica'],acesso:'Demanda espontânea / Disque 100',modal:{badge:'Atenção à Mulher',badgeBg:'#fce7f3',badgeColor:'#831843',title:'CAMI — Casa de Atendimento à Mulher Ibiapinense',city:'Ibiapina — CE',lat:-3.9218,lng:-40.8922,address:'Rua Sargento João Gomes Neto, Centro',horario:'Seg–Sex (horário comercial)',acesso:'Demanda espontânea / Denúncias: Disque 100',services:['Atendimento psicológico','Assistência social','Advocacia','Nutrição','Cursos de autonomia econômica','Grupo reflexivo para homens agressores'],specs:['Voltado exclusivamente para mulheres','Denúncias: Disque 100 (gratuito e sigiloso)'],aiContext:'violencia mulher apoio psicologico juridico ibiapina'}},
+  {type:'hospital',search:'hospital ubajara francisca belarmino cirurgia campanhas prevencao internacao',badge:'Hospital',badgeCls:'bhos',title:'Hospital Municipal Francisca Belarmino da Costa',city:'Ubajara',cityDetail:'Ubajara — CE',horario:'24 horas / 7 dias',tags:['Todas as idades','Cirurgia'],acesso:'Demanda espontânea / Regulação',obs:'Forte atuação em campanhas mensais de prevenção',modal:{badge:'Hospital',badgeBg:'#fef9c3',badgeColor:'#713f12',title:'Hospital Municipal Francisca Belarmino da Costa',city:'Ubajara — CE',lat:-3.8503,lng:-40.9073,email:'hospitalmunicipalubj2020@gmail.com',address:'Rua Antônio Barros, 173, Ubajara',horario:'24 horas / 7 dias',acesso:'Demanda espontânea / Regulação CROSS',obs:'Forte atuação em campanhas mensais de prevenção à saúde',services:['Cirurgias','Internação clínica','Urgência e estabilização','Campanhas preventivas mensais'],specs:['Referência hospitalar para Ubajara e região','25 respostas coletadas'],aiContext:'internacao hospital cirurgia prevencao ubajara'}},
+  {type:'ubs',search:'ubs psf ubajara familia pitanga chapada cajueiro',badge:'UBS',badgeCls:'bubs',title:'Rede UBS — Ubajara',city:'Ubajara',cityDetail:'Ubajara — CE · 18 unidades PSF',horario:'Seg–Sex 07h–17h',phone:'(88) 3634-2364',tags:['Todas as idades','Comunidade'],acesso:'Demanda espontânea / Agendamento',modal:{badge:'UBS',badgeBg:'#dbeafe',badgeColor:'#1e3a8a',title:'Rede UBS — Ubajara',city:'Ubajara — CE · 18 unidades PSF',lat:-3.8498,lng:-40.9065,phone:'(88) 3634-2364',horario:'Seg–Sex 07h–17h',acesso:'Demanda espontânea / Agendamento',services:['PSF Pitanga','Maria Graciema','Chapada','Araticum','Cajueiro','Itaperacema','Potós','Moitinga','Centro de Saúde e outros'],specs:['18 unidades PSF mapeadas'],aiContext:'atencao basica familia consulta ubajara'}},
+  {type:'cras',search:'cras creas ubajara cisantema maria moreira paefi protecao especial familias',badge:'CRAS / CREAS',badgeCls:'bcra',title:'CRAS Crisântema + CRAS III + CRAS Maria Moreira + CREAS',city:'Ubajara',cityDetail:'Ubajara — CE',horario:'Seg–Sex 07h30–17h',phone:'(88) 3634-2322',tags:['Famílias','Vulnerabilidade'],acesso:'Demanda espontânea · Porta do SUAS',obs:'Alta demanda de atendimento registrada',modal:{badge:'CRAS / CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Crisântema + CRAS III + CRAS Maria Moreira + CREAS',city:'Ubajara — CE',lat:-3.8510,lng:-40.9080,phone:'(88) 3634-2322',horario:'Seg–Sex 07h30–17h',acesso:'Demanda espontânea · Porta do SUAS',obs:'Alta demanda de atendimento registrada',services:['PAIF','SCFV','PAEFI','CadÚnico','BPC','Acolhimento institucional','Proteção Especial'],specs:['4 equipamentos socioassistenciais em Ubajara'],aiContext:'assistencia social vulnerabilidade risco paefi ubajara cras'}},
+  {type:'cras',search:'cras tiangua centro familias cadunico paif scfv assistencia social',badge:'CRAS',badgeCls:'bcra',title:'CRAS Centro — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Centro',horario:'Segunda a sexta',phone:'(88) 8821-6922',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Centro — Tianguá',city:'Tianguá — CE',lat:-3.7360,lng:-40.9900,phone:'(88) 8821-6922',email:'crascentrotiangua@gmail.com',address:'Rua Poe. Lauro Menezes, 99, Centro, Tianguá',horario:'Segunda a sexta',acesso:'Demanda espontânea · Porta do SUAS',services:['Cadastro Único (CadÚnico)','Orientação sobre Bolsa Família e benefícios sociais','PAIF — Proteção e Atendimento Integral à Família','SCFV — Serviço de Convivência e Fortalecimento de Vínculos','Encaminhamentos para saúde, educação e outros serviços','Atendimento a idosos, gestantes, crianças e famílias vulneráveis'],specs:['Referência de Proteção Social Básica para o território central de Tianguá'],aiContext:'assistencia social cadunico bolsa familia familias tiangua cras centro'}},
+  {type:'cras',search:'cras santo antonio tiangua bairro familias paif assistencia social',badge:'CRAS',badgeCls:'bcra',title:'CRAS Santo Antônio — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Bairro Santo Antônio',horario:'Segunda a sexta',tags:['Famílias','Vulnerabilidade social'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Santo Antônio — Tianguá',city:'Tianguá — CE',lat:-3.7385,lng:-40.9940,horario:'Segunda a sexta',acesso:'Demanda espontânea · Porta do SUAS',services:['Cadastro Único (CadÚnico)','PAIF — Proteção e Atendimento Integral à Família','SCFV — Serviço de Convivência e Fortalecimento de Vínculos','Encaminhamentos para a rede socioassistencial','Atendimento a idosos, gestantes, crianças e famílias vulneráveis'],specs:['Referência para a população do bairro Santo Antônio e região de Tianguá'],aiContext:'assistencia social familias tiangua cras santo antonio'}},
+  {type:'cras',search:'cras bela vista tiangua zona rural familias paif cadunico',badge:'CRAS',badgeCls:'bcra',title:'CRAS Bela Vista — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Distrito Bela Vista (Zona Rural)',horario:'Segunda a sexta',phone:'(88) 3671-1129',tags:['Famílias','Zona Rural'],acesso:'Demanda espontânea · Porta do SUAS',modal:{badge:'CRAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CRAS Bela Vista — Tianguá',city:'Tianguá — CE',lat:-3.7550,lng:-41.0100,phone:'(88) 3671-1129',email:'cras.bvista@gmail.com',address:'Distrito Bela Vista, Zona Rural, Tianguá',horario:'Segunda a sexta',acesso:'Demanda espontânea · Porta do SUAS',services:['Cadastro Único (CadÚnico)','Orientação sobre Bolsa Família e benefícios sociais','PAIF — Proteção e Atendimento Integral à Família','SCFV — Serviço de Convivência e Fortalecimento de Vínculos','Atendimento a famílias da zona rural em situação de vulnerabilidade'],specs:['Referência para o Distrito Bela Vista e zona rural de Tianguá'],aiContext:'assistencia social rural cadunico paif tiangua bela vista'}},
+  {type:'cras',search:'creas tiangua protecao especial violencia negligencia trabalho infantil rua medida socioeducativa direitos violados paefi',badge:'CREAS',badgeCls:'bcra',title:'CREAS — Tianguá',city:'Tianguá',cityDetail:'Tianguá — CE · Centro',horario:'Segunda a sexta',tags:['Proteção Especial','Violência','Direitos violados'],acesso:'Demanda espontânea / Encaminhamento rede',modal:{badge:'CREAS',badgeBg:'#f3e8ff',badgeColor:'#4a1d96',title:'CREAS — Tianguá',city:'Tianguá — CE',lat:-3.7348,lng:-40.9895,email:'creastiangua@hotmail.com',address:'Rua Teófilo Ramos, 299, Centro, Tianguá',horario:'Segunda a sexta',acesso:'Demanda espontânea ou encaminhamento pela rede de proteção',services:['Atendimento a situações de violência física, psicológica ou sexual','Negligência e abandono','Trabalho infantil','Situação de rua','Violência contra idosos','Medidas socioeducativas','PAEFI — Proteção e Atendimento Especializado a Famílias e Indivíduos'],specs:['Proteção Social Especial — referência para direitos violados e situações de risco','CREAS municipal de Tianguá'],aiContext:'violencia negligencia direitos violados protecao especial tiangua creas paefi'}},
+  {type:'cen',search:'cram mulher violencia domestica tiangua psicologia social juridico delegacia rede protecao acolhimento',badge:'Atenção à Mulher',badgeCls:'baas',title:'CRAM — Centro de Referência de Atendimento à Mulher',city:'Tianguá',cityDetail:'Tianguá — CE',phone:'(88) 3671-1084',tags:['Mulheres','Violência doméstica'],acesso:'Demanda espontânea / Encaminhamento',modal:{badge:'Atenção à Mulher',badgeBg:'#fce7f3',badgeColor:'#831843',title:'CRAM — Centro de Referência de Atendimento à Mulher',city:'Tianguá — CE',lat:-3.7352,lng:-40.9905,phone:'(88) 3671-1084',email:'cram.tiangua@gmail.com',horario:'Segunda a sexta (horário comercial)',acesso:'Demanda espontânea ou encaminhamento pela rede de proteção',services:['Acolhimento e escuta qualificada','Atendimento psicológico','Atendimento social','Orientação jurídica','Encaminhamento para rede de proteção','Articulação com Delegacia, CREAS, CAPS e Justiça'],specs:['Especializado no atendimento a mulheres em situação de violência','Articulação em rede com sistema de segurança e judiciário de Tianguá'],aiContext:'violencia mulher domestica psicologia juridico social tiangua cram'}}
 ];
+
+// ─── BUG FIX 1: norm() — regex com escapes corretos dentro de strings JS ───
+// Original usava \\u e \\w dentro de string normal (não raw), quebrando silenciosamente.
+function norm(s){
+  return String(s)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')   // remove diacríticos (acentos)
+    .replace(/[^\w\s]/g, ' ')          // remove pontuação
+    .replace(/\s+/g, ' ')              // normaliza espaços
+    .trim();
+}
+
+// ─── BUG FIX 2: tokenize() — normalizar ANTES de tokenizar ───
+// Original tokenizava sem normalizar primeiro; termos acentuados nunca batiam.
+// Lista de stop-words expandida para PT-BR
+const STOP_WORDS = new Set(['para','com','que','uma','moro','preciso','sobre','este','esse','servico','atendimento','nos','em','de','do','da','no','na','os','as','um','por','se','ou','ao','mais','mas','foi','ser','tem','ele','ela','meu','seu','sua','minha','estou','tenho','quero','precisa','ajuda','busco']);
+
+function tokenize(s){
+  return norm(s).split(/\s+/).filter(t => t.length > 2 && !STOP_WORDS.has(t));
+}
 
 const SVG_CLK='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
 const SVG_PHN='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.23-1.23a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
@@ -687,7 +682,8 @@ function renderCards(){
     const div=document.createElement('div');
     div.className='card';
     div.dataset.t=c.type;
-    div.dataset.search=c.search;
+    // BUG FIX 3: dataset.search pré-normalizado — chips e busca manual batem diretamente
+    div.dataset.search=norm(c.search + ' ' + c.title + ' ' + c.city + ' ' + c.badge + ' ' + (c.tags||[]).join(' ') + ' ' + (c.acesso||'') + ' ' + (c.obs||'') + ' ' + (c.modal?.aiContext||'') + ' ' + (c.modal?.services||[]).join(' ') + ' ' + (c.modal?.specs||[]).join(' '));
     div.dataset.idx=i;
     let rows='';
     if(c.horario)rows+=`<div class="row">${SVG_CLK}${esc(c.horario)}</div>`;
@@ -720,15 +716,15 @@ function buildMap(lat,lng,title){
   if(mapInst){try{mapInst.remove()}catch(e){}mapInst=null;}
   const el=document.getElementById('modal-map');
   el.innerHTML='';
-  if(typeof L==='undefined'){el.innerHTML='<div class="map-placeholder"><span style="font-size:1.5rem"></span><span>Mapa indisponível</span></div>';return;}
+  if(typeof L==='undefined'){el.innerHTML='<div class="map-placeholder"><span style="font-size:1.5rem">🗺️</span><span>Mapa indisponível</span></div>';return;}
   try{
     mapInst=L.map('modal-map',{zoomControl:true,scrollWheelZoom:false}).setView([lat,lng],15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(mapInst);
-    const icon=L.divIcon({className:'',html:'<div style="background:#1a5c3a;color:#fff;border-radius:50% 50% 50% 0;width:34px;height:34px;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);font-size:.95rem">H</span></div>',iconSize:[34,34],iconAnchor:[17,34],popupAnchor:[0,-38]});
+    const icon=L.divIcon({className:'',html:'<div style="background:#1a5c3a;color:#fff;border-radius:50% 50% 50% 0;width:34px;height:34px;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);font-size:.95rem">📍</span></div>',iconSize:[34,34],iconAnchor:[17,34],popupAnchor:[0,-38]});
     L.marker([lat,lng],{icon}).addTo(mapInst).bindPopup('<strong style="font-size:.84rem">'+esc(title)+'</strong>',{closeButton:false}).openPopup();
     setTimeout(()=>{if(mapInst)mapInst.invalidateSize()},300);
     setTimeout(()=>{if(mapInst)mapInst.invalidateSize()},700);
-  }catch(err){document.getElementById('modal-map').innerHTML='<div class="map-placeholder"><span></span><span>Mapa indisponível</span></div>';}
+  }catch(err){document.getElementById('modal-map').innerHTML='<div class="map-placeholder"><span>🗺️</span><span>Mapa indisponível</span></div>';}
 }
 
 let currentModalData=null;
@@ -789,7 +785,7 @@ const CITY_TERMS={
 const INTENT_RULES=[
   {id:'urgencia',label:'urgência ou crise',terms:['urgencia','emergencia','crise','surto','grave','24h','24 horas','samu','risco','socorro'],types:{upa:8,hospital:5,caps:2}},
   {id:'saude-mental',label:'saúde mental',terms:['psicologico','psicologia','psiquiatria','psiquiatrico','depressao','ansiedade','transtorno','sofrimento','terapia','mental'],types:{caps:8,ubs:4,cras:3,cen:2}},
-  {id:'alcool-drogas',label:'álcool e outras drogas',terms:['alcool','drogas','dependencia','quimica','adiccao','reducao','danos'],types:{caps:8,cen:2,ubs:1}},
+  {id:'alcool-drogas',label:'álcool e outras drogas',terms:['alcool','drogas','dependencia','quimica','adicao','reducao','danos'],types:{caps:8,cen:2,ubs:1}},
   {id:'violencia',label:'situação de violência ou violação de direitos',terms:['violencia','mulher','domestica','agressao','abuso','ameaca','risco','creas','denuncia','cram','cami'],types:{cras:6,cen:4,caps:2}},
   {id:'social',label:'assistência social',terms:['cadunico','cadastro','bolsa','beneficio','bpc','paif','scfv','familia','vulnerabilidade','social','cras','creas'],types:{cras:8,cen:2}},
   {id:'crianca',label:'criança ou adolescente',terms:['crianca','adolescente','jovem','infantil','menor'],types:{ubs:5,cras:4,caps:1}},
@@ -858,13 +854,17 @@ function analyzeNeed(q){
   const intentText=intents.length?intents.map(i=>i.label).slice(0,2).join(' e '):'sua descrição';
   const cityText=city?` em ${city}`:' na Serra da Ibiapaba';
   const first=fallback[0]?.card;
-  const safety=INTENT_RULES.some(rule=>rule.id==='urgencia'&&intents.includes(rule))?' Em risco imediato, procure a UPA 24h, hospital ou SAMU 192.':'';
+  const isUrgent=intents.some(rule=>rule.id==='urgencia');
+  const safety=isUrgent?' Em risco imediato, procure a UPA 24h, hospital ou SAMU 192.':'';
   return{message:first?`Pelo que você descreveu, a prioridade parece ser ${intentText}${cityText}. Recomendo começar por ${first.title}; abaixo estão as opções com maior compatibilidade pelo cruzamento de cidade, tipo de serviço e palavras-chave.${safety}`:`Não encontrei uma correspondência forte, mas você pode tentar termos como cidade, urgência, CAPS, CRAS, UBS, álcool/drogas, CRAM ou violência.${safety}`,cards:fallback};
 }
 
 function scoreCard(card,query,tokens,city,intents){
-  const hay=norm([card.title,card.city,card.cityDetail,card.badge,card.search,(card.tags||[]).join(' '),card.acesso,card.obs,card.modal?.aiContext,(card.modal?.services||[]).join(' '),(card.modal?.specs||[]).join(' ')].join(' '));
+  // dataset.search já está pré-normalizado no renderCards()
+  const cardEl=document.querySelector(`[data-idx="${CARDS.indexOf(card)}"]`);
+  const hay=cardEl ? cardEl.dataset.search : norm([card.title,card.city,card.badge,card.search,(card.tags||[]).join(' ')].join(' '));
   let score=0;const reasons=[];
+  // BUG FIX 4: any token match conta (não every) para scoring do assistente AI
   tokens.forEach(t=>{if(t.length>2&&hay.includes(t))score+=2;});
   if(city&&card.city===city){score+=8;reasons.push('mesma cidade');}else if(city){score-=2;}
   intents.forEach(rule=>{const weight=rule.types[card.type]||0;if(weight){score+=weight;reasons.push(rule.label);}rule.terms.forEach(term=>{if(query.includes(term)&&hay.includes(term))score+=2;});});
@@ -874,9 +874,13 @@ function scoreCard(card,query,tokens,city,intents){
   return{card,score,reason:reasons.slice(0,2).join(' + ')||'termos compatíveis no mapeamento'};
 }
 
-function detectCity(query){const found=Object.keys(CITY_TERMS).sort((a,b)=>b.length-a.length).find(term=>query.includes(term));return found?CITY_TERMS[found]:null;}
-function detectIntents(query,tokens){return INTENT_RULES.filter(rule=>rule.terms.some(term=>query.includes(term)||tokens.includes(term)));}
-function tokenize(s){return norm(s).split(/\s+/).filter(t=>t.length>2&&!['para','com','que','uma','moro','preciso','sobre','este','esse','servico','atendimento'].includes(t));}
+function detectCity(query){
+  const found=Object.keys(CITY_TERMS).sort((a,b)=>b.length-a.length).find(term=>query.includes(term));
+  return found?CITY_TERMS[found]:null;
+}
+function detectIntents(query,tokens){
+  return INTENT_RULES.filter(rule=>rule.terms.some(term=>query.includes(term)||tokens.includes(term)));
+}
 
 function serviceKindText(badge){
   const b=norm(badge);
@@ -909,21 +913,41 @@ function generateServiceDeepDive(d){
   return `Esse equipamento pode ser uma boa escolha quando a demanda envolve ${serviceKindText(d.badge)}. Para acessar, o caminho indicado é: ${access}.${schedule} No atendimento, procure explicar a situação principal e informe se já existe acompanhamento, encaminhamento, receita ou histórico de crise. No mapeamento, aparecem como ofertas: ${services}.${specs}${phone} ${getServiceTip(d)}`;
 }
 
+// ─── BUG FIX 5: handleSearch() — comparar chip usando data-q já normalizado ───
+// Original comparava norm(c.dataset.q) com norm(q.trim()), mas os chips tinham
+// acentos (ex: "álcool") e o input removia os acentos com norm(), nunca batendo.
+// Solução: data-q nos chips já é pre-normalizado (sem acentos), e comparamos ambos normalizados.
 function handleSearch(q){
   currentSearch=q;
+  const qNorm=norm(q.trim());
   document.getElementById('search-clear-btn').classList.toggle('vis',q.length>0);
-  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',norm(c.dataset.q||'')===norm(q.trim())));
+  document.querySelectorAll('.chip').forEach(c=>{
+    c.classList.toggle('on', qNorm !== '' && norm(c.dataset.q||'') === qNorm);
+  });
   clearTimeout(debounceTimer);
   debounceTimer=setTimeout(()=>applySearch(q),130);
 }
 
+// ─── BUG FIX 6: chipSearch() — limpar estado antes de toggle off ───
 function chipSearch(el){
-  const q=el.dataset.q;
-  if(el.classList.contains('on')){clearSearch();return;}
+  const q=el.dataset.q; // já normalizado (sem acentos) por design
+  if(el.classList.contains('on')){
+    clearSearch();
+    return;
+  }
   document.getElementById('search-input').value=q;
-  handleSearch(q);
+  currentSearch=q;
+  document.getElementById('search-clear-btn').classList.add('vis');
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  clearTimeout(debounceTimer);
+  debounceTimer=setTimeout(()=>applySearch(q),130);
 }
 
+// ─── BUG FIX 7: applySearch() — usar OR (some) em vez de AND (every) para tokens ───
+// Original: terms.every(term=>hay.includes(term)) — exigia TODOS os tokens na busca.
+// Corrigido: any token match + score de relevância por quantidade de matches.
+// Isso faz "caps são benedito" encontrar resultados, não só quando ambos aparecem juntos.
 function applySearch(q){
   const cards=document.querySelectorAll('.card');
   const query=norm(q.trim());
@@ -931,8 +955,18 @@ function applySearch(q){
   let visible=0;
   cards.forEach(c=>{
     const filterMatch=!currentFilter||c.dataset.t===currentFilter;
-    const hay=norm((c.dataset.search||'')+' '+c.textContent);
-    const searchMatch=!query||(terms.length?terms.every(term=>hay.includes(term)):hay.includes(query));
+    let searchMatch=true;
+    if(query){
+      const hay=c.dataset.search; // pré-normalizado
+      if(terms.length>0){
+        // Qualquer token encontrado = match (OR logic)
+        // Para buscas de 1 palavra: direto
+        // Para buscas de múltiplas palavras: pelo menos um token precisa bater
+        searchMatch=terms.some(term=>hay.includes(term));
+      } else {
+        searchMatch=hay.includes(query);
+      }
+    }
     const show=filterMatch&&searchMatch;
     c.style.display=show?'':'none';
     if(show)visible++;
@@ -941,15 +975,17 @@ function applySearch(q){
   const noRes=document.getElementById('no-results');
   const hint=document.getElementById('search-hint');
   if(query){
-    countEl.innerHTML=visible>0?`<b>${visible}</b> serviço${visible!==1?'s':''} encontrado${visible!==1?'s':''} para "<em>${esc(q)}</em>"`:`Nenhum resultado para "<em>${esc(q)}</em>"`;
+    countEl.innerHTML=visible>0
+      ?`<b>${visible}</b> serviço${visible!==1?'s':''} encontrado${visible!==1?'s':''} para "<em>${esc(q)}</em>"`
+      :`Nenhum resultado para "<em>${esc(q)}</em>"`;
     hint.style.display='none';
     noRes.style.display=visible===0?'block':'none';
   }else{
-    countEl.textContent='';hint.style.display='';noRes.style.display='none';
+    countEl.textContent='';
+    hint.style.display='';
+    noRes.style.display='none';
   }
 }
-
-function norm(s){return String(s).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^\\w\\s]/g,' ')}
 
 function clearSearch(){
   document.getElementById('search-input').value='';
@@ -962,6 +998,7 @@ function clearSearch(){
   applySearch('');
 }
 
+// ─── BUG FIX 8: fil() — ao trocar filtro, resetar chips de busca se necessário ───
 function fil(t,btn){
   currentFilter=t;
   document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
